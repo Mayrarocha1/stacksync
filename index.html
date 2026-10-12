@@ -203,7 +203,8 @@
         <!-- Rendered via JS -->
       </div>
 
-      <a href="https://gumroad.com" target="_blank" id="ui-modal-cta" class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs sm:text-sm text-center block shadow-lg shadow-emerald-600/30 transition transform active:scale-[0.98]">
+      <!-- BOTÓN DE COMPRA ENLAZADO DIRECTO A TU PRODUCTO EN GUMROAD -->
+      <a href="https://stacksync.gumroad.com/l/stacksync-pro" target="_blank" id="ui-modal-cta" class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs sm:text-sm text-center block shadow-lg shadow-emerald-600/30 transition transform active:scale-[0.98]">
         Get Lifetime Pro Access ($9.99 USD)
       </a>
 
@@ -257,6 +258,7 @@
           "One-time payment: lifetime access, no subscriptions."
         ],
         modalCta: "Get Lifetime Pro Access ($9.99 USD)",
+        modalCtaUrl: "https://stacksync.gumroad.com/l/stacksync-pro",
         modalHasCode: "Already purchased on Gumroad?",
         modalActivateBtn: "Activate",
         invalidKey: "Invalid license key. Use STACKPRO for testing.",
@@ -308,7 +310,8 @@
           "Descarga ilimitada del reporte en <strong>PDF listo para imprimir</strong>.",
           "Pago único vitalicio: sin suscripciones mensuales."
         ],
-        modalCta: "Obtener Licencia Pro ($9.99 USD)",
+        modalCta: "Obtener Licencia Pro ($4.99 USD - 50% Desc. LATAM)",
+        modalCtaUrl: "https://stacksync.gumroad.com/l/stacksync-pro?discount=LATAM",
         modalHasCode: "¿Ya compraste tu clave en Gumroad?",
         modalActivateBtn: "Activar",
         invalidKey: "Clave incorrecta. Usa STACKPRO para probar la demo.",
@@ -557,10 +560,14 @@
       document.getElementById('ui-b4-title').innerText = t.b4Title;
       document.getElementById('ui-b4-desc').innerText = t.b4Desc;
 
-      // Modal Pro
+      // Modal Pro y Enlace dinámico según idioma
       document.getElementById('ui-modal-title').innerText = t.modalTitle;
       document.getElementById('ui-modal-subtitle').innerText = t.modalSubtitle;
-      document.getElementById('ui-modal-cta').innerText = t.modalCta;
+      
+      const ctaBtn = document.getElementById('ui-modal-cta');
+      ctaBtn.innerText = t.modalCta;
+      ctaBtn.href = t.modalCtaUrl;
+
       document.getElementById('ui-modal-hascode').innerText = t.modalHasCode;
       document.getElementById('ui-modal-activate-btn').innerText = t.modalActivateBtn;
       document.getElementById('error-licencia').innerText = t.invalidKey;
