@@ -27,7 +27,7 @@
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     @media print {
       body { background: white !important; color: black !important; }
-      header, #panel-catalogo, #pwa-banner, #modal-pro, button { display: none !important; }
+      header, #panel-catalogo, #pwa-banner, #modal-pro, footer, button { display: none !important; }
       #cronograma-container { width: 100% !important; margin: 0 !important; padding: 0 !important; }
       .bloque-print { break-inside: avoid; border: 1px solid #e2e8f0 !important; margin-bottom: 12px !important; }
     }
@@ -178,9 +178,26 @@
           <div id="bloque-noche" class="space-y-2 text-xs text-slate-400 italic"></div>
         </div>
 
+        <!-- In-Protocol Medical Disclaimer (Included in PDF) -->
+        <div class="bloque-print bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-[10px] text-slate-500 leading-relaxed">
+          <p id="ui-pdf-disclaimer">
+            <strong class="text-slate-700">Medical Disclaimer:</strong> This protocol is generated automatically for educational and informational purposes based on chronobiology and pharmacokinetic literature. It does not replace medical advice, diagnosis, or personalized treatment. Consult a licensed physician before starting any dietary supplement regimen.
+          </p>
+        </div>
+
       </div>
     </section>
   </main>
+
+  <!-- Global Footer with Medical Disclaimer -->
+  <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center mt-auto">
+    <div class="max-w-4xl mx-auto space-y-1">
+      <p id="ui-footer-disclaimer" class="text-[11px] text-slate-500 leading-relaxed">
+        <strong>Aviso Médico:</strong> Esta herramienta tiene fines exclusivamente educativos e informativos sobre cronobiología nutricional e interacciones farmacocinéticas teóricas. No constituye asesoramiento médico, diagnóstico ni prescripción de tratamiento. Consulta siempre a un profesional de la salud antes de iniciar cualquier protocolo.
+      </p>
+      <p class="text-[10px] text-slate-400">© 2026 StackSync Pro. All rights reserved.</p>
+    </div>
+  </footer>
 
   <!-- Pro Modal -->
   <div id="modal-pro" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -203,9 +220,8 @@
         <!-- Rendered via JS -->
       </div>
 
-      <!-- BOTÓN DE COMPRA ENLAZADO DIRECTO A TU PRODUCTO EN GUMROAD -->
       <a href="https://stacksync.gumroad.com/l/stacksync-pro" target="_blank" id="ui-modal-cta" class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs sm:text-sm text-center block shadow-lg shadow-emerald-600/30 transition transform active:scale-[0.98]">
-        Get Lifetime Pro Access ($9.99 USD)
+        Get Lifetime Pro Access ($4.99 USD)
       </a>
 
       <div class="mt-4 pt-4 border-t border-slate-100 text-center">
@@ -220,7 +236,7 @@
   </div>
 
   <script>
-    // DICCIONARIO BILINGÜE UI
+    // DICCIONARIO BILINGÜE UI CON MEDICAL DISCLAIMER
     const i18n = {
       en: {
         subtitle: "Circadian Supplement Optimizer",
@@ -257,13 +273,14 @@
           "Unlimited <strong>clean clinical PDF export</strong>.",
           "One-time payment: lifetime access, no subscriptions."
         ],
-        modalCta: "Get Lifetime Pro Access ($9.99 USD)",
+        modalCta: "Get Lifetime Pro Access ($4.99 USD)",
         modalCtaUrl: "https://stacksync.gumroad.com/l/stacksync-pro",
         modalHasCode: "Already purchased on Gumroad?",
         modalActivateBtn: "Activate",
         invalidKey: "Invalid license key. Use STACKPRO for testing.",
         keySuccess: "Pro License successfully activated!",
         exportEmptyWarning: "Please select at least one supplement before exporting.",
+        disclaimer: "<strong>Medical Disclaimer:</strong> This application is intended strictly for educational and informational purposes regarding nutritional chronobiology and pharmacokinetic literature. It does not provide medical advice, diagnosis, or personalized treatment plans. Always consult a licensed healthcare professional before starting any dietary supplement protocol or altering prescribed medications.",
         categories: {
           todas: "All (200+)",
           mitocondria: "Longevity / NAD+",
@@ -310,13 +327,14 @@
           "Descarga ilimitada del reporte en <strong>PDF listo para imprimir</strong>.",
           "Pago único vitalicio: sin suscripciones mensuales."
         ],
-        modalCta: "Obtener Licencia Pro ($4.99 USD - 50% Desc. LATAM)",
-        modalCtaUrl: "https://stacksync.gumroad.com/l/stacksync-pro?discount=LATAM",
+        modalCta: "Obtener Licencia Pro ($4.99 USD)",
+        modalCtaUrl: "https://stacksync.gumroad.com/l/stacksync-pro",
         modalHasCode: "¿Ya compraste tu clave en Gumroad?",
         modalActivateBtn: "Activar",
         invalidKey: "Clave incorrecta. Usa STACKPRO para probar la demo.",
         keySuccess: "¡Licencia Pro Activada con Éxito!",
         exportEmptyWarning: "Por favor selecciona al menos un suplemento antes de exportar.",
+        disclaimer: "<strong>Aviso Médico:</strong> Esta herramienta tiene fines exclusivamente educativos e informativos sobre cronobiología nutricional e interacciones farmacocinéticas teóricas. No constituye asesoramiento médico, diagnóstico ni prescripción de tratamiento. Consulta siempre a un profesional de la salud o médico certificado antes de iniciar cualquier protocolo de suplementación o modificar un tratamiento farmacológico.",
         categories: {
           todas: "Todos (200+)",
           mitocondria: "Longevidad / NAD+",
@@ -522,7 +540,6 @@
       idiomaActual = lang;
       localStorage.setItem('stacksync_lang', lang);
 
-      // Botones selector
       const btnEn = document.getElementById('btn-lang-en');
       const btnEs = document.getElementById('btn-lang-es');
       if (lang === 'en') {
@@ -560,7 +577,11 @@
       document.getElementById('ui-b4-title').innerText = t.b4Title;
       document.getElementById('ui-b4-desc').innerText = t.b4Desc;
 
-      // Modal Pro y Enlace dinámico según idioma
+      // Disclaimers
+      document.getElementById('ui-footer-disclaimer').innerHTML = t.disclaimer;
+      document.getElementById('ui-pdf-disclaimer').innerHTML = t.disclaimer;
+
+      // Modal Pro
       document.getElementById('ui-modal-title').innerText = t.modalTitle;
       document.getElementById('ui-modal-subtitle').innerText = t.modalSubtitle;
       
@@ -681,7 +702,6 @@
       const ids = new Set(sups.map(s => s.id));
       const es = idiomaActual === 'es';
 
-      // DMT1 Conflict: Iron vs Zinc/Calcium/Magnesium
       if (ids.has('hierro') && (ids.has('calcio_citrato') || ids.has('zinc_picolinato') || ids.has('mg_glicinato') || ids.has('mg_citrato') || ids.has('mg_malato'))) {
         alertas.push({
           tipo: 'rojo',
@@ -692,7 +712,6 @@
         });
       }
 
-      // Bamboo + Collagen + Vit C
       if (ids.has('bambu') && (ids.has('colageno_hidro') || ids.has('colageno_uc2')) && ids.has('vit_c')) {
         alertas.push({
           tipo: 'verde',
@@ -703,7 +722,6 @@
         });
       }
 
-      // D3 + K2 Synergy
       if (ids.has('vit_d3') && ids.has('vit_k2')) {
         alertas.push({
           tipo: 'verde',
@@ -714,7 +732,6 @@
         });
       }
 
-      // Psyllium Alert
       if (ids.has('psyllium')) {
         alertas.push({
           tipo: 'rojo',
@@ -758,7 +775,6 @@
         panelAlertas.classList.add('hidden');
       }
 
-      // Grouping
       const bloques = { ayunas: [], manana: [], comida: [], noche: [] };
       sups.forEach(s => {
         let b = s.momento;
