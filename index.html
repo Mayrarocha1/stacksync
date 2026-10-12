@@ -1,14 +1,13 @@
-
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StackSync Pro | Optimizador Circadiano de Suplementos</title>
+  <title>StackSync Pro | Circadian Supplement Optimizer</title>
   <link rel="icon" type="image/jpeg" href="Icon.jpg">
   <link rel="apple-touch-icon" href="Icon.jpg">
   <link rel="manifest" href="manifest.json">
-  <!-- Configuración App Móvil (PWA) -->
+  <!-- PWA Settings -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="StackSync">
@@ -18,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -35,7 +35,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
 
-  <!-- Encabezado Principal -->
+  <!-- Header -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center space-x-3">
@@ -44,155 +44,145 @@
         </div>
         <div>
           <h1 class="font-extrabold text-base tracking-tight text-slate-900 leading-none">StackSync <span class="text-emerald-600">Pro</span></h1>
-          <p class="text-[10px] text-slate-600 font-medium tracking-wide">Optimizador Circadiano de Suplementos</p>
+          <p id="ui-subtitle" class="text-[10px] text-slate-600 font-medium tracking-wide">Circadian Supplement Optimizer</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
+        <!-- Language Switcher -->
+        <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 text-xs font-bold">
+          <button id="btn-lang-en" onclick="cambiarIdioma('en')" class="px-2 py-1 rounded-md transition text-white bg-slate-900">EN</button>
+          <button id="btn-lang-es" onclick="cambiarIdioma('es')" class="px-2 py-1 rounded-md transition text-slate-600 hover:text-slate-900">ES</button>
+        </div>
+
         <button id="btn-badge-pro" onclick="abrirModalPro()" class="text-xs font-bold px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg shadow-xs hover:opacity-95 transition flex items-center gap-1.5">
           <i class="fa-solid fa-crown text-[11px]"></i>
-          <span id="txt-badge-pro">Obtener Pro</span>
+          <span id="txt-badge-pro">Get Pro</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Banner PWA Informativo -->
+  <!-- PWA Banner -->
   <div id="pwa-banner" class="bg-emerald-900 text-white text-[11px] py-1.5 px-4 text-center font-medium flex items-center justify-center gap-2">
-    <span>💡 Instala StackSync en tu celular: Menú de Chrome (⋮) → Instalar o Agregar a Inicio</span>
+    <span id="ui-banner-text">💡 Install StackSync on mobile: Chrome Menu (⋮) → Install app / Add to Home screen</span>
   </div>
 
-  <!-- Contenedor Principal de Dos Columnas -->
+  <!-- Main Container -->
   <main class="max-w-7xl mx-auto p-3 sm:p-5 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5 w-full">
 
-    <!-- Panel Izquierdo: Catálogo y Filtros -->
+    <!-- Left Panel: Catalog & Filters -->
     <section id="panel-catalogo" class="lg:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-xs flex flex-col h-[650px] lg:h-[82vh] overflow-hidden">
-      <!-- Buscador y Filtros -->
       <div class="p-3 border-b border-slate-100 space-y-2.5 bg-white z-10">
         <div class="flex items-center justify-between">
-          <h2 class="font-bold text-xs uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-            <i class="fa-solid fa-layer-group text-emerald-600"></i> Catálogo Clínico
+          <h2 id="ui-catalog-title" class="font-bold text-xs uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+            <i class="fa-solid fa-layer-group text-emerald-600"></i> Clinical Catalog
           </h2>
-          <button onclick="limpiarSeleccion()" class="text-[11px] text-rose-500 hover:text-rose-600 font-semibold transition">Limpiar todo</button>
+          <button id="ui-clear-btn" onclick="limpiarSeleccion()" class="text-[11px] text-rose-500 hover:text-rose-600 font-semibold transition">Clear all</button>
         </div>
 
-        <!-- Buscador -->
+        <!-- Search input -->
         <div class="relative">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-          <input type="text" id="buscador" oninput="filtrarSuplementos()" placeholder="Buscar: Zinc, Bambú, NAD+, Vitamina D..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+          <input type="text" id="buscador" oninput="filtrarSuplementos()" placeholder="Search: Zinc, Bamboo, NAD+, Vitamin D..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
         </div>
 
-        <!-- Filtro por Categorías -->
-        <div class="flex gap-1.5 overflow-x-auto pb-1 text-[11px] no-scrollbar">
-          <button onclick="filtrarCategoria('todas')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-900 text-white font-medium shadow-xs" data-cat="todas">Todos (200+)</button>
-          <button onclick="filtrarCategoria('mitocondria')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="mitocondria">Longevidad / NAD+</button>
-          <button onclick="filtrarCategoria('minerales')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="minerales">Minerales</button>
-          <button onclick="filtrarCategoria('estructural')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="estructural">Bambú & Articular</button>
-          <button onclick="filtrarCategoria('vitaminas')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="vitaminas">Vitaminas</button>
-          <button onclick="filtrarCategoria('adaptogenos')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="adaptogenos">Adaptógenos</button>
-          <button onclick="filtrarCategoria('aminoacidos')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="aminoacidos">Aminoácidos</button>
-          <button onclick="filtrarCategoria('digestivos')" class="cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200" data-cat="digestivos">Digestión & Microbiota</button>
+        <!-- Category Filters -->
+        <div id="contenedor-categorias" class="flex gap-1.5 overflow-x-auto pb-1 text-[11px] no-scrollbar">
+          <!-- Rendered via JS -->
         </div>
 
         <div class="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
-          <span id="contador-seleccion" class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/50">0 seleccionados</span>
-          <span id="limite-aviso" class="text-slate-400">Versión Gratuita: hasta 4 suplementos</span>
+          <span id="contador-seleccion" class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/50">0 selected</span>
+          <span id="limite-aviso" class="text-slate-400">Free Tier: up to 4 supplements</span>
         </div>
       </div>
 
-      <!-- Lista con scroll fluido -->
+      <!-- Scrollable List -->
       <div id="lista-suplementos" class="flex-1 overflow-y-auto p-2.5 space-y-2">
-        <!-- Render dinámico desde JS -->
+        <!-- Rendered via JS -->
       </div>
     </section>
 
-    <!-- Panel Derecho: Cronograma Circadiano e Interacciones -->
+    <!-- Right Panel: Circadian Timeline & Interactions -->
     <section id="cronograma-container" class="lg:col-span-7 flex flex-col space-y-4 lg:h-[82vh] lg:overflow-y-auto pr-0 lg:pr-1">
 
-      <!-- Panel de Alertas Bioquímicas -->
+      <!-- Biochemical Alerts Panel -->
       <div id="panel-alertas" class="hidden space-y-2">
         <div class="flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase text-slate-500 px-1">
           <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
-          <span>Análisis de Interacciones Bioquímicas</span>
+          <span id="ui-alerts-title">Biochemical Interaction Analysis</span>
         </div>
         <div id="alertas-contenedor" class="space-y-2"></div>
       </div>
 
-      <!-- Botón Exportar PDF / Imprimir -->
+      <!-- Export PDF Header -->
       <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
         <div class="text-xs">
-          <p class="font-bold text-slate-800">Tu Rutina Diaria Personalizada</p>
-          <p class="text-[11px] text-slate-500">Separada por transportadores iónicos y farmacocinética.</p>
+          <p id="ui-routine-title" class="font-bold text-slate-800">Your Personalized Daily Protocol</p>
+          <p id="ui-routine-desc" class="text-[11px] text-slate-500">Separated by ionic transporters and circadian pharmacokinetics.</p>
         </div>
         <button onclick="exportarRutinaPDF()" class="px-3.5 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition flex items-center gap-2 shadow-xs">
           <i class="fa-solid fa-file-arrow-down text-emerald-400"></i>
-          <span>Exportar PDF</span>
+          <span id="ui-export-btn">Export PDF</span>
         </button>
       </div>
 
-      <!-- Bloques Horarios Circadianos -->
+      <!-- Circadian Blocks -->
       <div class="space-y-3.5">
         
-        <!-- Bloque 1: Ayunas / Amanecer -->
+        <!-- Block 1: Fasted / Wake-up -->
         <div class="bloque-print bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
             <div class="flex items-center space-x-2">
               <span class="w-3 h-3 rounded-full bg-amber-400 flex items-center justify-center text-[8px] text-white font-bold">1</span>
-              <h3 class="font-bold text-slate-900 text-sm">Al Despertar / Ayunas</h3>
+              <h3 id="ui-b1-title" class="font-bold text-slate-900 text-sm">Wake-Up / Fasted</h3>
             </div>
-            <span class="text-[11px] text-slate-400 font-medium">Estómago vacío + 250ml de agua</span>
+            <span id="ui-b1-desc" class="text-[11px] text-slate-400 font-medium">Empty stomach + 250ml water</span>
           </div>
-          <div id="bloque-ayunas" class="space-y-2 text-xs text-slate-400 italic">
-            Selecciona suplementos del catálogo para poblar este bloque.
-          </div>
+          <div id="bloque-ayunas" class="space-y-2 text-xs text-slate-400 italic"></div>
         </div>
 
-        <!-- Bloque 2: Desayuno / Media Mañana -->
+        <!-- Block 2: Breakfast / Morning -->
         <div class="bloque-print bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
             <div class="flex items-center space-x-2">
               <span class="w-3 h-3 rounded-full bg-orange-500 flex items-center justify-center text-[8px] text-white font-bold">2</span>
-              <h3 class="font-bold text-slate-900 text-sm">Desayuno / Media Mañana</h3>
+              <h3 id="ui-b2-title" class="font-bold text-slate-900 text-sm">Breakfast / Mid-Morning</h3>
             </div>
-            <span class="text-[11px] text-slate-400 font-medium">Con grasas saludables (huevo, aguacate, aceite)</span>
+            <span id="ui-b2-desc" class="text-[11px] text-slate-400 font-medium">With healthy fats (eggs, avocado, olive oil)</span>
           </div>
-          <div id="bloque-manana" class="space-y-2 text-xs text-slate-400 italic">
-            Selecciona suplementos del catálogo para poblar este bloque.
-          </div>
+          <div id="bloque-manana" class="space-y-2 text-xs text-slate-400 italic"></div>
         </div>
 
-        <!-- Bloque 3: Comida Fuerte / Almuerzo -->
+        <!-- Block 3: Lunch / Main Meal -->
         <div class="bloque-print bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
             <div class="flex items-center space-x-2">
               <span class="w-3 h-3 rounded-full bg-emerald-600 flex items-center justify-center text-[8px] text-white font-bold">3</span>
-              <h3 class="font-bold text-slate-900 text-sm">Comida Principal / Almuerzo</h3>
+              <h3 id="ui-b3-title" class="font-bold text-slate-900 text-sm">Main Meal / Lunch</h3>
             </div>
-            <span class="text-[11px] text-slate-400 font-medium">Comida completa / Separar de café caliente</span>
+            <span id="ui-b3-desc" class="text-[11px] text-slate-400 font-medium">Full meal / Separate from hot coffee</span>
           </div>
-          <div id="bloque-comida" class="space-y-2 text-xs text-slate-400 italic">
-            Selecciona suplementos del catálogo para poblar este bloque.
-          </div>
+          <div id="bloque-comida" class="space-y-2 text-xs text-slate-400 italic"></div>
         </div>
 
-        <!-- Bloque 4: Noche / Antes de Dormir -->
+        <!-- Block 4: Bedtime / Evening -->
         <div class="bloque-print bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
             <div class="flex items-center space-x-2">
               <span class="w-3 h-3 rounded-full bg-indigo-600 flex items-center justify-center text-[8px] text-white font-bold">4</span>
-              <h3 class="font-bold text-slate-900 text-sm">Noche (30-60 min antes de dormir)</h3>
+              <h3 id="ui-b4-title" class="font-bold text-slate-900 text-sm">Night (30-60 min pre-bed)</h3>
             </div>
-            <span class="text-[11px] text-slate-400 font-medium">Relajación neuromuscular / Cero estimulantes</span>
+            <span id="ui-b4-desc" class="text-[11px] text-slate-400 font-medium">Neuromuscular relaxation / Zero stimulants</span>
           </div>
-          <div id="bloque-noche" class="space-y-2 text-xs text-slate-400 italic">
-            Selecciona suplementos del catálogo para poblar este bloque.
-          </div>
+          <div id="bloque-noche" class="space-y-2 text-xs text-slate-400 italic"></div>
         </div>
 
       </div>
     </section>
   </main>
 
-  <!-- Modal Freemium / Desbloqueo Gumroad Pro -->
+  <!-- Pro Modal -->
   <div id="modal-pro" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 relative overflow-hidden animate-in fade-in zoom-in duration-200">
       <div class="absolute -right-8 -top-8 w-32 h-32 bg-amber-200/40 rounded-full blur-2xl"></div>
@@ -205,168 +195,428 @@
         <span class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner">
           <i class="fa-solid fa-crown"></i>
         </span>
-        <h3 class="text-xl font-extrabold text-slate-900">Desbloquea StackSync Pro</h3>
-        <p class="text-xs text-slate-500">Has alcanzado el límite gratuito de 4 suplementos o intentas exportar tu reporte clínico.</p>
+        <h3 id="ui-modal-title" class="text-xl font-extrabold text-slate-900">Unlock StackSync Pro</h3>
+        <p id="ui-modal-subtitle" class="text-xs text-slate-500">You reached the 4-supplement free limit or attempted to export your protocol.</p>
       </div>
 
-      <div class="space-y-2.5 text-xs text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-200/60 mb-5">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-check text-emerald-600"></i>
-          <span>Catálogo ilimitado con los <strong>200+ suplementos clínicos</strong>.</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-check text-emerald-600"></i>
-          <span>Análisis completo de interacciones químicas y transportador DMT1.</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-check text-emerald-600"></i>
-          <span>Descarga ilimitada del reporte en <strong>PDF listo para imprimir</strong>.</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-check text-emerald-600"></i>
-          <span>Pago único vitalicio: sin suscripciones mensuales.</span>
-        </div>
+      <div id="ui-modal-features" class="space-y-2.5 text-xs text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-200/60 mb-5">
+        <!-- Rendered via JS -->
       </div>
 
-      <!-- Enlace a Gumroad -->
-      <a href="https://gumroad.com" target="_blank" class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs sm:text-sm text-center block shadow-lg shadow-emerald-600/30 transition transform active:scale-[0.98]">
-        Obtener Licencia Pro ($9.99 USD)
+      <a href="https://gumroad.com" target="_blank" id="ui-modal-cta" class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs sm:text-sm text-center block shadow-lg shadow-emerald-600/30 transition transform active:scale-[0.98]">
+        Get Lifetime Pro Access ($9.99 USD)
       </a>
 
-      <!-- Formulario para ingresar clave -->
       <div class="mt-4 pt-4 border-t border-slate-100 text-center">
-        <p class="text-[11px] text-slate-500 mb-2">¿Ya compraste tu clave en Gumroad?</p>
+        <p id="ui-modal-hascode" class="text-[11px] text-slate-500 mb-2">Already purchased on Gumroad?</p>
         <div class="flex gap-2">
-          <input type="text" id="input-licencia" placeholder="Pega tu clave (ej. STACKPRO)" class="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-emerald-500">
-          <button onclick="activarLicencia()" class="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-xl hover:bg-slate-800 transition">Activar</button>
+          <input type="text" id="input-licencia" placeholder="KEY (e.g. STACKPRO)" class="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <button id="ui-modal-activate-btn" onclick="activarLicencia()" class="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-xl hover:bg-slate-800 transition">Activate</button>
         </div>
-        <p id="error-licencia" class="text-[10px] text-rose-600 mt-1.5 hidden">Clave incorrecta. Usa <strong>STACKPRO</strong> para probar la demo.</p>
+        <p id="error-licencia" class="text-[10px] text-rose-600 mt-1.5 hidden">Invalid license key. Use STACKPRO for testing.</p>
       </div>
     </div>
   </div>
 
-  <!-- Script con Base de Datos de 200+ Suplementos y Algoritmo -->
   <script>
-    // BASE DE DATOS BIOQUÍMICA (200+ SUPLEMENTOS)
+    // DICCIONARIO BILINGÜE UI
+    const i18n = {
+      en: {
+        subtitle: "Circadian Supplement Optimizer",
+        banner: "💡 Install StackSync on mobile: Chrome Menu (⋮) → Install app / Add to Home screen",
+        catalogTitle: "Clinical Catalog",
+        clearBtn: "Clear all",
+        searchPlaceholder: "Search: Zinc, Bamboo, NAD+, Vitamin D...",
+        selectedCount: "selected",
+        freeLimit: "Free Tier: up to 4 supplements",
+        proLimit: "Unlimited Access to 200+ Supplements",
+        getPro: "Get Pro",
+        proActive: "Pro Active",
+        alertsTitle: "Biochemical Interaction Analysis",
+        routineTitle: "Your Personalized Daily Protocol",
+        routineDesc: "Separated by ionic transporters and circadian pharmacokinetics.",
+        exportBtn: "Export PDF",
+        b1Title: "Wake-Up / Fasted",
+        b1Desc: "Empty stomach + 250ml water",
+        b2Title: "Breakfast / Mid-Morning",
+        b2Desc: "With healthy fats (eggs, avocado, olive oil)",
+        b3Title: "Main Meal / Lunch",
+        b3Desc: "Full meal / Separate from hot coffee",
+        b4Title: "Night (30-60 min pre-bed)",
+        b4Desc: "Neuromuscular relaxation / Zero stimulants",
+        emptyBlock: "No supplements assigned to this time window.",
+        takeWith: "Intake:",
+        avoidWith: "Avoid with:",
+        clinicalNote: "Clinical note:",
+        modalTitle: "Unlock StackSync Pro",
+        modalSubtitle: "You reached the 4-supplement free limit or attempted to export your protocol.",
+        modalFeatures: [
+          "Full access to <strong>200+ evidence-based compounds</strong>.",
+          "Complete DMT1 & ionic transporter conflict detection.",
+          "Unlimited <strong>clean clinical PDF export</strong>.",
+          "One-time payment: lifetime access, no subscriptions."
+        ],
+        modalCta: "Get Lifetime Pro Access ($9.99 USD)",
+        modalHasCode: "Already purchased on Gumroad?",
+        modalActivateBtn: "Activate",
+        invalidKey: "Invalid license key. Use STACKPRO for testing.",
+        keySuccess: "Pro License successfully activated!",
+        exportEmptyWarning: "Please select at least one supplement before exporting.",
+        categories: {
+          todas: "All (200+)",
+          mitocondria: "Longevity / NAD+",
+          minerales: "Minerals",
+          estructural: "Bamboo & Connective",
+          vitaminas: "Vitamins",
+          adaptogenos: "Adaptogens & Botanicals",
+          aminoacidos: "Amino Acids",
+          digestivos: "Digestion & Gut"
+        }
+      },
+      es: {
+        subtitle: "Optimizador Circadiano de Suplementos",
+        banner: "💡 Instala StackSync en tu celular: Menú de Chrome (⋮) → Instalar o Agregar a Inicio",
+        catalogTitle: "Catálogo Clínico",
+        clearBtn: "Limpiar todo",
+        searchPlaceholder: "Buscar: Zinc, Bambú, NAD+, Vitamina D...",
+        selectedCount: "seleccionados",
+        freeLimit: "Versión Gratuita: hasta 4 suplementos",
+        proLimit: "Acceso Ilimitado a 200+ Suplementos",
+        getPro: "Obtener Pro",
+        proActive: "Pro Activo",
+        alertsTitle: "Análisis de Interacciones Bioquímicas",
+        routineTitle: "Tu Rutina Diaria Personalizada",
+        routineDesc: "Separada por transportadores iónicos y farmacocinética.",
+        exportBtn: "Exportar PDF",
+        b1Title: "Al Despertar / Ayunas",
+        b1Desc: "Estómago vacío + 250ml de agua",
+        b2Title: "Desayuno / Media Mañana",
+        b2Desc: "Con grasas saludables (huevo, aguacate, aceite)",
+        b3Title: "Comida Principal / Almuerzo",
+        b3Desc: "Comida completa / Separar de café caliente",
+        b4Title: "Noche (30-60 min antes de dormir)",
+        b4Desc: "Relajación neuromuscular / Cero estimulantes",
+        emptyBlock: "No hay suplementos asignados a este momento.",
+        takeWith: "Toma:",
+        avoidWith: "Evitar con:",
+        clinicalNote: "Nota clínica:",
+        modalTitle: "Desbloquea StackSync Pro",
+        modalSubtitle: "Has alcanzado el límite gratuito de 4 suplementos o intentas exportar tu reporte clínico.",
+        modalFeatures: [
+          "Catálogo ilimitado con los <strong>200+ suplementos clínicos</strong>.",
+          "Análisis completo de interacciones químicas y transportador DMT1.",
+          "Descarga ilimitada del reporte en <strong>PDF listo para imprimir</strong>.",
+          "Pago único vitalicio: sin suscripciones mensuales."
+        ],
+        modalCta: "Obtener Licencia Pro ($9.99 USD)",
+        modalHasCode: "¿Ya compraste tu clave en Gumroad?",
+        modalActivateBtn: "Activar",
+        invalidKey: "Clave incorrecta. Usa STACKPRO para probar la demo.",
+        keySuccess: "¡Licencia Pro Activada con Éxito!",
+        exportEmptyWarning: "Por favor selecciona al menos un suplemento antes de exportar.",
+        categories: {
+          todas: "Todos (200+)",
+          mitocondria: "Longevidad / NAD+",
+          minerales: "Minerales",
+          estructural: "Bambú & Articular",
+          vitaminas: "Vitaminas",
+          adaptogenos: "Adaptógenos",
+          aminoacidos: "Aminoácidos",
+          digestivos: "Digestión & Microbiota"
+        }
+      }
+    };
+
+    // BASE DE DATOS BILINGÜE (Inglés por defecto, español integrado)
     const DB = [
-      // Longevidad, NAD+ y Mitocondria
-      { id: 'nad_plus', nombre: 'NAD+ (Liposomal)', cat: 'mitocondria', momento: 'ayunas', dosis: '100 - 300 mg', vehiculo: 'Sublingual o en ayunas', evitar: 'Tarde / Noche (alerta celular)', adv: 'Acompañar con TMG para evitar depleción de grupos metilo.' },
-      { id: 'nmn', nombre: 'NMN (Mononucleótido de Nicotinamida)', cat: 'mitocondria', momento: 'ayunas', dosis: '250 - 500 mg', vehiculo: 'Sublingual con agua matutina', evitar: 'Noche', adv: 'Precursor directo de NAD+ celular.' },
-      { id: 'nr', nombre: 'NR (Ribósido de Nicotinamida)', cat: 'mitocondria', momento: 'ayunas', dosis: '300 mg', vehiculo: 'Agua al despertar', evitar: 'Horario vespertino', adv: 'Activa enzimas SIRT1 y SIRT3.' },
-      { id: 'nadh', nombre: 'NADH (Coenzima 1)', cat: 'mitocondria', momento: 'ayunas', dosis: '10 - 20 mg', vehiculo: 'En ayunas estricto con agua', evitar: 'Comida inmediata (se degrada con pH ácido)', adv: 'Energía mitocondrial pura.' },
-      { id: 'nac', nombre: 'NAC (N-Acetilcisteína)', cat: 'mitocondria', momento: 'manana', dosis: '600 - 1,200 mg', vehiculo: 'Con abundante agua', evitar: 'Noche (acción mucolítica activa)', adv: 'Precursor intracelular maestro de glutatión.' },
-      { id: 'glutation_lipo', nombre: 'Glutatión Liposomal', cat: 'mitocondria', momento: 'ayunas', dosis: '250 - 500 mg', vehiculo: 'En ayunas con agua fría', evitar: 'Bebidas muy calientes', adv: 'Biodisponibilidad superior a la forma reducida simple.' },
-      { id: 'tmg', nombre: 'TMG (Trimetilglicina / Betaína anhidra)', cat: 'mitocondria', momento: 'manana', dosis: '500 - 1,000 mg', vehiculo: 'Con alimentos matutinos', evitar: 'Noche', adv: 'Sinergia esencial con NMN/NAD+ para reciclar homocisteína.' },
-      { id: 'urolitina_a', nombre: 'Urolitina A', cat: 'mitocondria', momento: 'manana', dosis: '250 - 500 mg', vehiculo: 'Con grasa dietética', evitar: 'Ayuno absoluto', adv: 'Estimula mitofagia y regeneración muscular.' },
-      { id: 'coq10', nombre: 'Coenzima Q10 (Ubiquinol)', cat: 'mitocondria', momento: 'manana', dosis: '100 - 200 mg', vehiculo: 'Grasas saludables (huevo, aguacate)', evitar: 'Noche (aumenta ATP celular)', adv: 'Imprescindible si se usan estatinas.' },
-      { id: 'pqq', nombre: 'PQQ (Pirroloquinolina Quinona)', cat: 'mitocondria', momento: 'manana', dosis: '10 - 20 mg', vehiculo: 'Con desayuno', evitar: 'Noche', adv: 'Estimula la biogénesis mitocondrial (creación de nuevas mitocondrias).' },
-      { id: 'ala', nombre: 'Ácido Alfa Lipoico (ALA / R-ALA)', cat: 'mitocondria', momento: 'ayunas', dosis: '300 - 600 mg', vehiculo: 'Estómago vacío con agua', evitar: 'Comida grasa abundante inmediata', adv: 'Quelante moderado: separar de hierro y zinc.' },
-      { id: 'resveratrol', nombre: 'Trans-Resveratrol', cat: 'mitocondria', momento: 'manana', dosis: '250 - 500 mg', vehiculo: 'Grasas (yogur entero o aceite)', evitar: 'Exposición UV solar directa', adv: 'Polifenol activador de sirtuinas.' },
-      { id: 'fisetina', nombre: 'Fisetina', cat: 'mitocondria', momento: 'manana', dosis: '100 - 500 mg', vehiculo: 'Grasas dietéticas', evitar: 'Ayuno estricto', adv: 'Potente agente senolítico natural.' },
-      { id: 'espermidina', nombre: 'Espermidina', cat: 'mitocondria', momento: 'noche', dosis: '1 - 6 mg', vehiculo: 'Con agua o comida ligera', evitar: 'Comidas hiperproteicas extremas', adv: 'Inductor clave de autofagia celular.' },
-      { id: 'apigenina', nombre: 'Apigenina', cat: 'mitocondria', momento: 'noche', dosis: '50 mg', vehiculo: 'Con agua 45 min antes de dormir', evitar: 'Estimulantes', adv: 'Inhibe CD38 (preserva NAD+) y relaja vía GABA.' },
-      { id: 'astaxantina', nombre: 'Astaxantina', cat: 'mitocondria', momento: 'manana', dosis: '4 - 12 mg', vehiculo: 'Grasas dietéticas (muy liposoluble)', evitar: 'Estómago vacío (nula absorción)', adv: 'Carotenoide con gran afinidad de membrana mitocondrial.' },
+      // Longevity & Mitochondria
+      { id: 'nad_plus', cat: 'mitocondria', momento: 'ayunas', dosis: '100 - 300 mg',
+        nombre_en: 'NAD+ (Liposomal)', vehiculo_en: 'Sublingual or fasted with water', evitar_en: 'Afternoon / Night (cellular arousal)', adv_en: 'Stack with TMG to prevent methyl group depletion.',
+        nombre_es: 'NAD+ (Liposomal)', vehiculo_es: 'Sublingual o en ayunas', evitar_es: 'Tarde / Noche (alerta celular)', adv_es: 'Acompañar con TMG para evitar depleción de grupos metilo.' },
+      { id: 'nmn', cat: 'mitocondria', momento: 'ayunas', dosis: '250 - 500 mg',
+        nombre_en: 'NMN (Nicotinamide Mononucleotide)', vehiculo_en: 'Sublingual with morning water', evitar_en: 'Night', adv_en: 'Direct cellular NAD+ precursor.',
+        nombre_es: 'NMN (Mononucleótido de Nicotinamida)', vehiculo_es: 'Sublingual con agua matutina', evitar_es: 'Noche', adv_es: 'Precursor directo de NAD+ celular.' },
+      { id: 'nr', cat: 'mitocondria', momento: 'ayunas', dosis: '300 mg',
+        nombre_en: 'NR (Nicotinamide Riboside)', vehiculo_en: 'Morning water upon waking', evitar_en: 'Late afternoon', adv_en: 'Activates SIRT1 and SIRT3 longevity enzymes.',
+        nombre_es: 'NR (Ribósido de Nicotinamida)', vehiculo_es: 'Agua al despertar', evitar_es: 'Horario vespertino', adv_es: 'Activa enzimas SIRT1 y SIRT3.' },
+      { id: 'nadh', cat: 'mitocondria', momento: 'ayunas', dosis: '10 - 20 mg',
+        nombre_en: 'NADH (Coenzyme 1)', vehiculo_en: 'Strictly on empty stomach with water', evitar_en: 'Immediate food (degraded by low pH)', adv_en: 'Pure mitochondrial energy production.',
+        nombre_es: 'NADH (Coenzima 1)', vehiculo_es: 'En ayunas estricto con agua', evitar_es: 'Comida inmediata (se degrada con pH ácido)', adv_es: 'Energía mitocondrial pura.' },
+      { id: 'nac', cat: 'mitocondria', momento: 'manana', dosis: '600 - 1,200 mg',
+        nombre_en: 'NAC (N-Acetyl Cysteine)', vehiculo_en: 'Plentiful water', evitar_en: 'Night (active mucolytic effect)', adv_en: 'Master intracellular glutathione precursor.',
+        nombre_es: 'NAC (N-Acetilcisteína)', vehiculo_es: 'Con abundante agua', evitar_es: 'Noche (acción mucolítica activa)', adv_es: 'Precursor intracelular maestro de glutatión.' },
+      { id: 'glutation_lipo', cat: 'mitocondria', momento: 'ayunas', dosis: '250 - 500 mg',
+        nombre_en: 'Liposomal Glutathione', vehiculo_en: 'Fasted with cool water', evitar_en: 'Hot beverages', adv_en: 'Superior bioavailability over reduced plain form.',
+        nombre_es: 'Glutatión Liposomal', vehiculo_es: 'En ayunas con agua fría', evitar_es: 'Bebidas muy calientes', adv_es: 'Biodisponibilidad superior a la forma reducida simple.' },
+      { id: 'tmg', cat: 'mitocondria', momento: 'manana', dosis: '500 - 1,000 mg',
+        nombre_en: 'TMG (Betaine Anhydrous)', vehiculo_en: 'With morning meal', evitar_en: 'Night', adv_en: 'Crucial methyl donor synergy with NMN/NAD+ to recycle homocysteine.',
+        nombre_es: 'TMG (Trimetilglicina / Betaína anhidra)', vehiculo_es: 'Con alimentos matutinos', evitar_es: 'Noche', adv_es: 'Sinergia esencial con NMN/NAD+ para reciclar homocisteína.' },
+      { id: 'urolitina_a', cat: 'mitocondria', momento: 'manana', dosis: '250 - 500 mg',
+        nombre_en: 'Urolithin A', vehiculo_en: 'With dietary fats', evitar_en: 'Fasted state', adv_en: 'Triggers mitophagy and muscular renewal.',
+        nombre_es: 'Urolitina A', vehiculo_es: 'Con grasa dietética', evitar_es: 'Ayuno absoluto', adv_es: 'Estimula mitofagia y regeneración muscular.' },
+      { id: 'coq10', cat: 'mitocondria', momento: 'manana', dosis: '100 - 200 mg',
+        nombre_en: 'CoQ10 (Ubiquinol)', vehiculo_en: 'Healthy fats (eggs, avocado)', evitar_en: 'Night (enhances cellular ATP)', adv_en: 'Indispensable when taking statins.',
+        nombre_es: 'Coenzima Q10 (Ubiquinol)', vehiculo_es: 'Grasas saludables (huevo, aguacate)', evitar_es: 'Noche (aumenta ATP celular)', adv_es: 'Imprescindible si se usan estatinas.' },
+      { id: 'pqq', cat: 'mitocondria', momento: 'manana', dosis: '10 - 20 mg',
+        nombre_en: 'PQQ (Pyrroloquinoline Quinone)', vehiculo_en: 'With breakfast', evitar_en: 'Night', adv_en: 'Stimulates de novo mitochondrial biogenesis.',
+        nombre_es: 'PQQ (Pirroloquinolina Quinona)', vehiculo_es: 'Con desayuno', evitar_es: 'Noche', adv_es: 'Estimula la biogénesis mitocondrial.' },
+      { id: 'ala', cat: 'mitocondria', momento: 'ayunas', dosis: '300 - 600 mg',
+        nombre_en: 'Alpha Lipoic Acid (R-ALA)', vehiculo_en: 'Empty stomach with water', evitar_en: 'Heavy fatty meal right away', adv_en: 'Mild chelator: space 2 hrs away from iron & zinc.',
+        nombre_es: 'Ácido Alfa Lipoico (ALA / R-ALA)', vehiculo_es: 'Estómago vacío con agua', evitar_es: 'Comida grasa abundante inmediata', adv_es: 'Quelante moderado: separar de hierro y zinc.' },
+      { id: 'resveratrol', cat: 'mitocondria', momento: 'manana', dosis: '250 - 500 mg',
+        nombre_en: 'Trans-Resveratrol', vehiculo_en: 'Fatty vehicle (whole yogurt or olive oil)', evitar_en: 'Direct UV sunlight exposure', adv_en: 'Polyphenol sirtuin activator.',
+        nombre_es: 'Trans-Resveratrol', vehiculo_es: 'Grasas (yogur entero o aceite)', evitar_es: 'Exposición UV solar directa', adv_es: 'Polifenol activador de sirtuinas.' },
+      { id: 'fisetina', cat: 'mitocondria', momento: 'manana', dosis: '100 - 500 mg',
+        nombre_en: 'Fisetin', vehiculo_en: 'Dietary fats', evitar_en: 'Strict fasting', adv_en: 'Potent natural senolytic compound.',
+        nombre_es: 'Fisetina', vehiculo_es: 'Grasas dietéticas', evitar_es: 'Ayuno estricto', adv_es: 'Potente agente senolítico natural.' },
+      { id: 'espermidina', cat: 'mitocondria', momento: 'noche', dosis: '1 - 6 mg',
+        nombre_en: 'Spermidine', vehiculo_en: 'Water or light meal', evitar_en: 'Extreme hyperprotein loading', adv_en: 'Key cellular autophagy inducer.',
+        nombre_es: 'Espermidina', vehiculo_es: 'Con agua o comida ligera', evitar_es: 'Comidas hiperproteicas extremas', adv_es: 'Inductor clave de autofagia celular.' },
+      { id: 'apigenina', cat: 'mitocondria', momento: 'noche', dosis: '50 mg',
+        nombre_en: 'Apigenin', vehiculo_en: 'Water 45 min before sleep', evitar_en: 'Stimulants', adv_en: 'Inhibits CD38 (preserves NAD+) and activates GABA receptors.',
+        nombre_es: 'Apigenina', vehiculo_es: 'Con agua 45 min antes de dormir', evitar_es: 'Estimulantes', adv_es: 'Inhibe CD38 (preserva NAD+) y relaja vía GABA.' },
+      { id: 'astaxantina', cat: 'mitocondria', momento: 'manana', dosis: '4 - 12 mg',
+        nombre_en: 'Astaxanthin', vehiculo_en: 'Dietary fats (strictly lipophilic)', evitar_en: 'Empty stomach (zero absorption)', adv_en: 'High affinity mitochondrial membrane carotenoid.',
+        nombre_es: 'Astaxantina', vehiculo_es: 'Grasas dietéticas (muy liposoluble)', evitar_es: 'Estómago vacío (nula absorción)', adv_es: 'Carotenoide con gran afinidad de membrana mitocondrial.' },
 
-      // Silicio, Bambú y Estructural Articular
-      { id: 'bambu', nombre: 'Extracto de Bambú (70-85% Sílice)', cat: 'estructural', momento: 'ayunas', dosis: '300 - 500 mg', vehiculo: 'Agua matutina o con cítricos', evitar: 'Lácteos densos inmediatos', adv: 'Fuente orgánica superior de silicio biodisponible para colágeno.' },
-      { id: 'cola_caballo', nombre: 'Cola de Caballo (Equisetum)', cat: 'estructural', momento: 'manana', dosis: '300 mg', vehiculo: 'Abundante agua', evitar: 'Uso prolongado sin descanso (efecto diurético)', adv: 'Aporta silicio mineral vegetal.' },
-      { id: 'silicio_orto', nombre: 'Ácido Ortosilícico Estabilizado', cat: 'estructural', momento: 'ayunas', dosis: '5 - 10 mg', vehiculo: 'Agua fría en ayunas', evitar: 'Antiácidos a base de aluminio', adv: 'Forma monomérica de absorción intestinal directa.' },
-      { id: 'colageno_hidro', nombre: 'Péptidos de Colágeno I y III', cat: 'estructural', momento: 'ayunas', dosis: '10 - 15 g', vehiculo: 'Agua con Vitamina C', evitar: 'Mezclar con batidos hiperproteicos densos', adv: 'La Vitamina C es cofactor indispensable para reticular la fibra.' },
-      { id: 'colageno_uc2', nombre: 'Colágeno Tipo II No Desnaturalizado (UC-II)', cat: 'estructural', momento: 'noche', dosis: '40 mg', vehiculo: 'Estómago vacío con agua antes de dormir', evitar: 'Comidas copiosas inmediatas', adv: 'Actúa por tolerancia inmunológica oral en placas de Peyer.' },
-      { id: 'acido_hialuronico', nombre: 'Ácido Hialurónico Oral', cat: 'estructural', momento: 'manana', dosis: '100 - 200 mg', vehiculo: 'Mínimo 300 ml de agua', evitar: 'Deshidratación', adv: 'Retiene agua en la matriz dérmica y articular.' },
-      { id: 'msm', nombre: 'MSM (Metilsulfonilmetano)', cat: 'estructural', momento: 'manana', dosis: '1,000 - 3,000 mg', vehiculo: 'Agua con limón o zumo cítrico', evitar: 'Noche (puede provocar insomnio en sensibles)', adv: 'Donador activo de azufre para queratina y cartílago.' },
-      { id: 'glucosamina', nombre: 'Sulfato de Glucosamina', cat: 'estructural', momento: 'comida', dosis: '1,500 mg', vehiculo: 'Con comida principal', evitar: 'Ayuno (posible molestia gástrica)', adv: 'Revisar control si hay alergia severa a mariscos.' },
-      { id: 'condroitina', nombre: 'Sulfato de Condroitina', cat: 'estructural', momento: 'comida', dosis: '1,200 mg', vehiculo: 'Con alimentos', evitar: 'Ayuno', adv: 'Efecto sinérgico con glucosamina.' },
-      { id: 'boswellia', nombre: 'Boswellia Serrata (AKBA)', cat: 'estructural', momento: 'comida', dosis: '300 - 500 mg', vehiculo: 'Con grasa dietética', evitar: 'Estómago vacío', adv: 'Inhibidor selectivo de la enzima 5-lipoxigenasa (5-LOX).' },
+      // Connective, Bamboo & Silicon
+      { id: 'bambu', cat: 'estructural', momento: 'ayunas', dosis: '300 - 500 mg',
+        nombre_en: 'Bamboo Extract (70-85% Silica)', vehiculo_en: 'Morning water or citrus juice', evitar_en: 'Heavy dairy intake immediately', adv_en: 'Superior organic source of bioavailable silicon for prolyl hydroxylase.',
+        nombre_es: 'Extracto de Bambú (70-85% Sílice)', vehiculo_es: 'Agua matutina o con cítricos', evitar_es: 'Lácteos densos inmediatos', adv_es: 'Fuente orgánica superior de silicio biodisponible para colágeno.' },
+      { id: 'cola_caballo', cat: 'estructural', momento: 'manana', dosis: '300 mg',
+        nombre_en: 'Horsetail Extract (Equisetum)', vehiculo_en: 'Plentiful water', evitar_en: 'Unbroken prolonged use (mild diuretic)', adv_en: 'Provides plant-derived mineral silicon.',
+        nombre_es: 'Cola de Caballo (Equisetum)', vehiculo_es: 'Abundante agua', evitar_es: 'Uso prolongado sin descanso', adv_es: 'Aporta silicio mineral vegetal.' },
+      { id: 'silicio_orto', cat: 'estructural', momento: 'ayunas', dosis: '5 - 10 mg',
+        nombre_en: 'Stabilized Orthosilicic Acid', vehiculo_en: 'Cold water on empty stomach', evitar_en: 'Aluminium antacids', adv_en: 'Monomeric form directly absorbed by intestinal mucosa.',
+        nombre_es: 'Ácido Ortosilícico Estabilizado', vehiculo_es: 'Agua fría en ayunas', evitar_es: 'Antiácidos a base de aluminio', adv_es: 'Forma monomérica de absorción intestinal directa.' },
+      { id: 'colageno_hidro', cat: 'estructural', momento: 'ayunas', dosis: '10 - 15 g',
+        nombre_en: 'Collagen Peptides (Type I & III)', vehiculo_en: 'Water with Vitamin C cofactor', evitar_en: 'Dense branched protein shakes at same time', adv_en: 'Vitamin C is required for lysine and proline hydroxylation.',
+        nombre_es: 'Péptidos de Colágeno I y III', vehiculo_es: 'Agua con Vitamina C', evitar_es: 'Mezclar con batidos hiperproteicos densos', adv_es: 'La Vitamina C es cofactor indispensable para reticular la fibra.' },
+      { id: 'colageno_uc2', cat: 'estructural', momento: 'noche', dosis: '40 mg',
+        nombre_en: 'Undenatured Type II Collagen (UC-II)', vehiculo_en: 'Empty stomach with water at bedtime', evitar_en: 'Heavy meals right away', adv_en: 'Operates via oral immune tolerance in Peyer\'s patches.',
+        nombre_es: 'Colágeno Tipo II No Desnaturalizado (UC-II)', vehiculo_es: 'Estómago vacío antes de dormir', evitar_es: 'Comidas copiosas inmediatas', adv_es: 'Actúa por tolerancia inmunológica oral en placas de Peyer.' },
+      { id: 'acido_hialuronico', cat: 'estructural', momento: 'manana', dosis: '100 - 200 mg',
+        nombre_en: 'Hyaluronic Acid (Oral)', vehiculo_en: 'Minimum 300 ml water', evitar_en: 'Dehydration', adv_en: 'Binds moisture in dermal and synovial extracellular matrices.',
+        nombre_es: 'Ácido Hialurónico Oral', vehiculo_es: 'Mínimo 300 ml de agua', evitar_es: 'Deshidratación', adv_es: 'Retiene agua en la matriz dérmica y articular.' },
+      { id: 'msm', cat: 'estructural', momento: 'manana', dosis: '1,000 - 3,000 mg',
+        nombre_en: 'MSM (Methylsulfonylmethane)', vehiculo_en: 'Citrus juice or water', evitar_en: 'Night (may cause mild alertness/insomnia)', adv_en: 'Active sulfur donor for keratin disulfide bridges.',
+        nombre_es: 'MSM (Metilsulfonilmetano)', vehiculo_es: 'Agua con limón o zumo cítrico', evitar_es: 'Noche (puede provocar insomnio en sensibles)', adv_es: 'Donador activo de azufre para queratina y cartílago.' },
+      { id: 'glucosamina', cat: 'estructural', momento: 'comida', dosis: '1,500 mg',
+        nombre_en: 'Glucosamine Sulfate', vehiculo_en: 'With main meal', evitar_en: 'Fasting (stomach irritation)', adv_en: 'Check if severe shellfish allergy exists.',
+        nombre_es: 'Sulfato de Glucosamina', vehiculo_es: 'Con comida principal', evitar_es: 'Ayuno (posible molestia gástrica)', adv_es: 'Revisar control si hay alergia severa a mariscos.' },
+      { id: 'condroitina', cat: 'estructural', momento: 'comida', dosis: '1,200 mg',
+        nombre_en: 'Chondroitin Sulfate', vehiculo_en: 'With food', evitar_en: 'Fasting', adv_en: 'Synergistic joint protection with glucosamine.',
+        nombre_es: 'Sulfato de Condroitina', vehiculo_es: 'Con alimentos', evitar_es: 'Ayuno', adv_es: 'Efecto sinérgico con glucosamina.' },
+      { id: 'boswellia', cat: 'estructural', momento: 'comida', dosis: '300 - 500 mg',
+        nombre_en: 'Boswellia Serrata (AKBA)', vehiculo_en: 'Dietary fat', evitar_en: 'Empty stomach', adv_en: 'Selective 5-lipoxygenase (5-LOX) inhibitor.',
+        nombre_es: 'Boswellia Serrata (AKBA)', vehiculo_es: 'Con grasa dietética', evitar_es: 'Estómago vacío', adv_es: 'Inhibidor selectivo de la enzima 5-lipoxigenasa (5-LOX).' },
 
-      // Minerales y Quelatos
-      { id: 'mg_glicinato', nombre: 'Magnesio (Bisglicinato)', cat: 'minerales', momento: 'noche', dosis: '200 - 400 mg', vehiculo: 'Con agua 1h antes de dormir', evitar: 'Alcohol', adv: 'Cruza receptor intestinal quelado; mínimo efecto laxante.' },
-      { id: 'mg_treonato', nombre: 'Magnesio (L-Treonato / Magtein)', cat: 'minerales', momento: 'noche', dosis: '1,000 - 2,000 mg', vehiculo: 'Con agua', evitar: 'Lácteos densos', adv: 'Máxima penetración a través de la barrera hematoencefálica.' },
-      { id: 'mg_malato', nombre: 'Magnesio (Malato)', cat: 'minerales', momento: 'manana', dosis: '300 - 400 mg', vehiculo: 'Con desayuno', evitar: 'Noche (el ácido málico apoya el ciclo de Krebs)', adv: 'Excelente para fatiga física y mialgias.' },
-      { id: 'mg_taurato', nombre: 'Magnesio (Taurato)', cat: 'minerales', momento: 'noche', dosis: '200 - 400 mg', vehiculo: 'Con agua o cena', evitar: 'Estimulantes', adv: 'Afinidad directa con el sistema cardiovascular y presión arterial.' },
-      { id: 'mg_citrato', nombre: 'Magnesio (Citrato)', cat: 'minerales', momento: 'noche', dosis: '200 - 300 mg', vehiculo: 'Abundante agua', evitar: 'Comidas copiosas inmediatas', adv: 'Acción osmótica útil para motilidad intestinal lenta.' },
-      { id: 'hierro', nombre: 'Hierro (Bisglicinato Ferrochel)', cat: 'minerales', momento: 'ayunas', dosis: '25 - 45 mg', vehiculo: 'Agua con limón o Vitamina C', evitar: 'Café, té verde, lácteos, huevos, calcio', adv: 'COMPETENCIA DMT1: Tomar separado de Calcio, Zinc y Magnesio.' },
-      { id: 'zinc_picolinato', nombre: 'Zinc (Picolinato)', cat: 'minerales', momento: 'comida', dosis: '15 - 30 mg', vehiculo: 'SIEMPRE con comida sólida completa', evitar: 'Estómago vacío (náusea severa), café, fitatos', adv: 'Compite con el cobre; espaciar si se toman ambos.' },
-      { id: 'zinc_carnosina', nombre: 'Zinc L-Carnosina', cat: 'minerales', momento: 'ayunas', dosis: '75 mg', vehiculo: 'Con agua antes de comer', evitar: 'Comidas ultraprocesadas', adv: 'Diseñado específicamente para reparar la mucosa gástrica.' },
-      { id: 'cobre', nombre: 'Cobre (Bisglicinato Quelado)', cat: 'minerales', momento: 'comida', dosis: '1 - 2 mg', vehiculo: 'Con alimentos', evitar: 'Ingerir simultáneamente con zinc', adv: 'Guardar proporción 15:1 frente al zinc total diario.' },
-      { id: 'calcio_citrato', nombre: 'Calcio (Citrato)', cat: 'minerales', momento: 'comida', dosis: '500 - 600 mg', vehiculo: 'Con comida', evitar: 'Hierro matutino y café excesivo', adv: 'Bloqueador competitivo directo del hierro no hemo.' },
-      { id: 'selenio', nombre: 'Selenio (L-Selenometionina)', cat: 'minerales', momento: 'manana', dosis: '100 - 200 mcg', vehiculo: 'Con alimentos', evitar: 'Megadosis de Vit C en el mismo minuto', adv: 'Cofactor de deiodinasas para conversión tiroidea T4 a T3.' },
-      { id: 'yodo_kelp', nombre: 'Yodo (Extracto de Kelp)', cat: 'minerales', momento: 'manana', dosis: '150 mcg', vehiculo: 'Con comida', evitar: 'Noche', adv: 'Supervisar si existe tiroiditis autoinmune (Hashimoto).' },
-      { id: 'boro', nombre: 'Boro (Fructoborato)', cat: 'minerales', momento: 'manana', dosis: '3 - 6 mg', vehiculo: 'Con desayuno', evitar: 'Alcohol', adv: 'Optimiza el balance de magnesio, calcio y hormonas libres.' },
-      { id: 'cromo_picolinato', nombre: 'Cromo (Picolinato)', cat: 'minerales', momento: 'comida', dosis: '200 - 400 mcg', vehiculo: '15 min antes de carbohidratos', evitar: 'Ayuno prolongado cetogénico', adv: 'Sensibiliza el transportador GLUT4 a la insulina.' },
-      { id: 'potasio_citrato', nombre: 'Potasio (Citrato)', cat: 'minerales', momento: 'comida', dosis: '99 - 200 mg', vehiculo: 'Abundante agua con comida', evitar: 'Ayuno estricto', adv: 'Contraindicado con diuréticos ahorradores de potasio o IECA.' },
-      { id: 'litio_orotato', nombre: 'Litio (Microdosis Orotato)', cat: 'minerales', momento: 'noche', dosis: '1 - 5 mg (elemental)', vehiculo: 'Con agua antes de dormir', evitar: 'Deshidratación', adv: 'Microdosis nutricional con acción neuroprotectora.' },
+      // Minerals & Chelates
+      { id: 'mg_glicinato', cat: 'minerales', momento: 'noche', dosis: '200 - 400 mg',
+        nombre_en: 'Magnesium (Bisglycinate)', vehiculo_en: 'Water 1 hr before sleep', evitar_en: 'Alcohol', adv_en: 'Absorbed via dipeptide pathway; non-laxative.',
+        nombre_es: 'Magnesio (Bisglicinato)', vehiculo_es: 'Con agua 1h antes de dormir', evitar_es: 'Alcohol', adv_es: 'Cruza receptor intestinal quelado; mínimo efecto laxante.' },
+      { id: 'mg_treonato', cat: 'minerales', momento: 'noche', dosis: '1,000 - 2,000 mg',
+        nombre_en: 'Magnesium L-Threonate (Magtein)', vehiculo_en: 'Water at night', evitar_en: 'Dense dairy', adv_en: 'High blood-brain barrier permeability; synaptogenesis support.',
+        nombre_es: 'Magnesio (L-Treonato / Magtein)', vehiculo_es: 'Con agua', evitar_es: 'Lácteos densos', adv_es: 'Máxima penetración a través de la barrera hematoencefálica.' },
+      { id: 'mg_malato', cat: 'minerales', momento: 'manana', dosis: '300 - 400 mg',
+        nombre_en: 'Magnesium (Malate)', vehiculo_en: 'With breakfast', evitar_en: 'Night (malic acid fuels Krebs cycle)', adv_en: 'Ideal for physical fatigue and ATP generation.',
+        nombre_es: 'Magnesio (Malato)', vehiculo_es: 'Con desayuno', evitar_es: 'Noche (apoya el ciclo de Krebs)', adv_es: 'Excelente para fatiga física y mialgias.' },
+      { id: 'mg_taurato', cat: 'minerales', momento: 'noche', dosis: '200 - 400 mg',
+        nombre_en: 'Magnesium (Taurate)', vehiculo_en: 'Water or evening meal', evitar_en: 'Stimulants', adv_en: 'High cardiovascular and vascular endothelial affinity.',
+        nombre_es: 'Magnesio (Taurato)', vehiculo_es: 'Con agua o cena', evitar_es: 'Estimulantes', adv_es: 'Afinidad directa con el sistema cardiovascular y presión arterial.' },
+      { id: 'mg_citrato', cat: 'minerales', momento: 'noche', dosis: '200 - 300 mg',
+        nombre_en: 'Magnesium (Citrate)', vehiculo_en: 'Abundant water', evitar_en: 'Heavy meals', adv_en: 'Osmotic action; helpful for sluggish bowel motility.',
+        nombre_es: 'Magnesio (Citrato)', vehiculo_es: 'Abundante agua', evitar_es: 'Comidas copiosas inmediatas', adv_es: 'Acción osmótica útil para motilidad intestinal lenta.' },
+      { id: 'hierro', cat: 'minerales', momento: 'ayunas', dosis: '25 - 45 mg',
+        nombre_en: 'Iron (Ferrochel Bisglycinate)', vehiculo_en: 'Water with lemon or Vitamin C', evitar_en: 'Coffee, green tea, dairy, eggs, calcium', adv_en: 'DMT1 COMPETITION: Must be spaced from Calcium, Zinc, and Magnesium.',
+        nombre_es: 'Hierro (Bisglicinato Ferrochel)', vehiculo_es: 'Agua con limón o Vitamina C', evitar_es: 'Café, té verde, lácteos, huevos, calcio', adv_es: 'COMPETENCIA DMT1: Tomar separado de Calcio, Zinc y Magnesio.' },
+      { id: 'zinc_picolinato', cat: 'minerales', momento: 'comida', dosis: '15 - 30 mg',
+        nombre_en: 'Zinc (Picolinate)', vehiculo_en: 'ALWAYS with full solid food', evitar_en: 'Empty stomach (severe nausea), coffee, phytates', adv_en: 'Competes with copper; balance throughout day.',
+        nombre_es: 'Zinc (Picolinato)', vehiculo_es: 'SIEMPRE con comida sólida completa', evitar_es: 'Estómago vacío (náusea severa), café, fitatos', adv_es: 'Compite con el cobre; espaciar si se toman ambos.' },
+      { id: 'zinc_carnosina', cat: 'minerales', momento: 'ayunas', dosis: '75 mg',
+        nombre_en: 'Zinc L-Carnosine', vehiculo_en: 'Water before eating', evitar_en: 'Ultra-processed meals', adv_en: 'Specifically engineered for gastric mucosal repair.',
+        nombre_es: 'Zinc L-Carnosina', vehiculo_es: 'Con agua antes de comer', evitar_es: 'Comidas ultraprocesadas', adv_es: 'Diseñado específicamente para reparar la mucosa gástrica.' },
+      { id: 'cobre', cat: 'minerales', momento: 'comida', dosis: '1 - 2 mg',
+        nombre_en: 'Copper (Bisglycinate Chelate)', vehiculo_en: 'With food', evitar_en: 'Simultaneous ingestion with zinc', adv_en: 'Maintain 15:1 Zinc to Copper ratio.',
+        nombre_es: 'Cobre (Bisglicinato Quelado)', vehiculo_es: 'Con alimentos', evitar_es: 'Ingerir simultáneamente con zinc', adv_es: 'Guardar proporción 15:1 frente al zinc total diario.' },
+      { id: 'calcio_citrato', cat: 'minerales', momento: 'comida', dosis: '500 - 600 mg',
+        nombre_en: 'Calcium (Citrate)', vehiculo_en: 'With lunch', evitar_en: 'Morning iron & high caffeine', adv_en: 'Direct competitive blocker of non-heme iron absorption.',
+        nombre_es: 'Calcio (Citrato)', vehiculo_es: 'Con comida', evitar_es: 'Hierro matutino y café excesivo', adv_es: 'Bloqueador competitivo directo del hierro no hemo.' },
+      { id: 'selenio', cat: 'minerales', momento: 'manana', dosis: '100 - 200 mcg',
+        nombre_en: 'Selenium (L-Selenomethionine)', vehiculo_en: 'With food', evitar_en: 'Megadose Vitamin C in same minute', adv_en: 'Essential deiodinase cofactor for T4 to T3 thyroid conversion.',
+        nombre_es: 'Selenio (L-Selenometionina)', vehiculo_es: 'Con alimentos', evitar_es: 'Megadosis de Vit C en el mismo minuto', adv_es: 'Cofactor de deiodinasas para conversión tiroidea T4 a T3.' },
+      { id: 'boro', cat: 'minerales', momento: 'manana', dosis: '3 - 6 mg',
+        nombre_en: 'Boron (Fructoborate)', vehiculo_en: 'With breakfast', evitar_en: 'Alcohol', adv_en: 'Enhances magnesium/calcium balance and free sex hormone ratios.',
+        nombre_es: 'Boro (Fructoborato)', vehiculo_es: 'Con desayuno', evitar_es: 'Alcohol', adv_es: 'Optimiza el balance de magnesio, calcio y hormonas libres.' },
+      { id: 'cromo_picolinato', cat: 'minerales', momento: 'comida', dosis: '200 - 400 mcg',
+        nombre_en: 'Chromium (Picolinate)', vehiculo_en: '15 min before carbohydrates', evitar_en: 'Prolonged keto fasting', adv_en: 'Enhances GLUT4 insulin receptor sensitivity.',
+        nombre_es: 'Cromo (Picolinato)', vehiculo_es: '15 min antes de carbohidratos', evitar_es: 'Ayuno prolongado cetogénico', adv_es: 'Sensibiliza el transportador GLUT4 a la insulina.' },
 
-      // Vitaminas
-      { id: 'vit_d3', nombre: 'Vitamina D3 (Colecalciferol)', cat: 'vitaminas', momento: 'manana', dosis: '2,000 - 5,000 UI', vehiculo: 'Grasas dietéticas (huevo, aguacate)', evitar: 'Noche (puede inhibir melatonina)', adv: 'Requiere magnesio suficiente para convertirse en 25(OH)D.' },
-      { id: 'vit_k2', nombre: 'Vitamina K2 (Menaquinona MK-7)', cat: 'vitaminas', momento: 'manana', dosis: '100 - 200 mcg', vehiculo: 'Grasas dietéticas', evitar: 'Noche', adv: 'CONTRAINDICADO con anticoagulantes tipo warfarina/acenocumarol.' },
-      { id: 'vit_c', nombre: 'Vitamina C (Ácido Ascórbico/Ascorbato)', cat: 'vitaminas', momento: 'manana', dosis: '500 - 1,000 mg', vehiculo: 'Con agua o alimentos', evitar: 'Megadosis simultánea con B12', adv: 'Aumenta hasta 3x la absorción del hierro vegetal.' },
-      { id: 'complejo_b', nombre: 'Complejo B Metilado', cat: 'vitaminas', momento: 'manana', dosis: '1 cápsula', vehiculo: 'Con desayuno', evitar: 'Tarde / Noche (alta activación del SNC)', adv: 'Contiene formas activadas (P-5-P, Metilcobalamina, Metilfolato).' },
-      { id: 'metilfolato', nombre: 'Metilfolato (L-5-MTHF)', cat: 'vitaminas', momento: 'manana', dosis: '400 - 800 mcg', vehiculo: 'Con o sin alimentos', evitar: 'Exceso de té verde simultáneo', adv: 'Crucial si existe polimorfismo MTHFR.' },
-      { id: 'b12_metil', nombre: 'Vitamina B12 (Metilcobalamina)', cat: 'vitaminas', momento: 'manana', dosis: '1,000 mcg', vehiculo: 'Sublingual o con agua', evitar: 'Dosis masiva de Vit C inmediata', adv: 'Separar 2 horas de ácido ascórbico concentrado.' },
-      { id: 'biotina', nombre: 'Biotina (Vitamina B7)', cat: 'vitaminas', momento: 'manana', dosis: '2,500 - 5,000 mcg', vehiculo: 'Con agua', evitar: 'Claras de huevo crudas (avidina)', adv: 'Suspender 48-72h antes de análisis sanguíneos de tiroides/troponina.' },
-      { id: 'vit_a_retinol', nombre: 'Vitamina A (Palmitato de Retinilo)', cat: 'vitaminas', momento: 'comida', dosis: '3,000 - 5,000 UI', vehiculo: 'Grasas saludables', evitar: 'Ayuno estricto', adv: 'Vitamina liposoluble con acumulación hepática.' },
-      { id: 'vit_e_completa', nombre: 'Vitamina E (Mezcla de Tocoferoles)', cat: 'vitaminas', momento: 'comida', dosis: '200 - 400 UI', vehiculo: 'Grasas dietéticas', evitar: 'Ayuno', adv: 'Efecto antiagregante suave en dosis altas.' },
+      // Vitamins
+      { id: 'vit_d3', cat: 'vitaminas', momento: 'manana', dosis: '2,000 - 5,000 IU',
+        nombre_en: 'Vitamin D3 (Cholecalciferol)', vehiculo_en: 'Dietary fats (egg, avocado)', evitar_en: 'Night (suppresses nocturnal melatonin secretion)', adv_en: 'Requires adequate magnesium to be hydroxylated into active 25(OH)D.',
+        nombre_es: 'Vitamina D3 (Colecalciferol)', vehiculo_es: 'Grasas dietéticas (huevo, aguacate)', evitar_es: 'Noche (puede inhibir melatonina)', adv_es: 'Requiere magnesio suficiente para convertirse en 25(OH)D.' },
+      { id: 'vit_k2', cat: 'vitaminas', momento: 'manana', dosis: '100 - 200 mcg',
+        nombre_en: 'Vitamin K2 (Menaquinone MK-7)', vehiculo_en: 'Dietary fats', evitar_en: 'Night', adv_en: 'CONTRAINDICATED with warfarin/coumarin anticoagulants.',
+        nombre_es: 'Vitamina K2 (Menaquinona MK-7)', vehiculo_es: 'Grasas dietéticas', evitar_es: 'Noche', adv_es: 'CONTRAINDICADO con anticoagulantes tipo warfarina.' },
+      { id: 'vit_c', cat: 'vitaminas', momento: 'manana', dosis: '500 - 1,000 mg',
+        nombre_en: 'Vitamin C (Ascorbic Acid / Ascorbate)', vehiculo_en: 'With water or food', evitar_en: 'Simultaneous megadose with B12', adv_en: 'Triples non-heme plant iron absorption rate.',
+        nombre_es: 'Vitamina C (Ácido Ascórbico/Ascorbato)', vehiculo_es: 'Con agua o alimentos', evitar_es: 'Megadosis simultánea con B12', adv_es: 'Aumenta hasta 3x la absorción del hierro vegetal.' },
+      { id: 'complejo_b', cat: 'vitaminas', momento: 'manana', dosis: '1 capsule',
+        nombre_en: 'Methylated B-Complex', vehiculo_en: 'With breakfast', evitar_en: 'Afternoon / Night (CNS activation)', adv_en: 'Contains bioactive forms (P-5-P, Methylcobalamin, 5-MTHF).',
+        nombre_es: 'Complejo B Metilado', vehiculo_es: 'Con desayuno', evitar_es: 'Tarde / Noche (alta activación del SNC)', adv_es: 'Contiene formas activadas (P-5-P, Metilcobalamina, Metilfolato).' },
+      { id: 'metilfolato', cat: 'vitaminas', momento: 'manana', dosis: '400 - 800 mcg',
+        nombre_en: 'Methylfolate (L-5-MTHF)', vehiculo_en: 'With or without food', evitar_en: 'Heavy green tea at same exact minute', adv_en: 'Crucial if MTHFR polymorphism exists.',
+        nombre_es: 'Metilfolato (L-5-MTHF)', vehiculo_es: 'Con o sin alimentos', evitar_es: 'Exceso de té verde simultáneo', adv_es: 'Crucial si existe polimorfismo MTHFR.' },
+      { id: 'b12_metil', cat: 'vitaminas', momento: 'manana', dosis: '1,000 mcg',
+        nombre_en: 'Vitamin B12 (Methylcobalamin)', vehiculo_en: 'Sublingual or with water', evitar_en: 'Immediate large dose of ascorbic acid', adv_en: 'Space 2 hours from megadose Vitamin C.',
+        nombre_es: 'Vitamina B12 (Metilcobalamina)', vehiculo_es: 'Sublingual o con agua', evitar_es: 'Dosis masiva de Vit C inmediata', adv_es: 'Separar 2 horas de ácido ascórbico concentrado.' },
+      { id: 'biotina', cat: 'vitaminas', momento: 'manana', dosis: '2,500 - 5,000 mcg',
+        nombre_en: 'Biotin (Vitamin B7)', vehiculo_en: 'With water', evitar_en: 'Raw egg whites (avidin binding)', adv_en: 'Discontinue 48-72h prior to thyroid/troponin blood lab testing.',
+        nombre_es: 'Biotina (Vitamina B7)', vehiculo_es: 'Con agua', evitar_es: 'Claras de huevo crudas (avidina)', adv_es: 'Suspender 48-72h antes de análisis sanguíneos de tiroides.' },
 
-      // Adaptógenos, Hongos y Extractos
-      { id: 'ashwagandha', nombre: 'Ashwagandha (KSM-66 / Sensoril)', cat: 'adaptogenos', momento: 'noche', dosis: '300 - 600 mg', vehiculo: 'Con comida o cena', evitar: 'Alcohol', adv: 'Modula cortisol. Supervisar si hay autoinmunidad activa.' },
-      { id: 'rhodiola', nombre: 'Rhodiola Rosea (3% Rosavinas)', cat: 'adaptogenos', momento: 'ayunas', dosis: '200 - 400 mg', vehiculo: 'Agua matutina en ayunas', evitar: 'Tarde / Noche (estimulante adrenérgico)', adv: 'Excelente para fatiga mental inducida por estrés.' },
-      { id: 'curcumina_pip', nombre: 'Cúrcuma + Piperina / BCM-95', cat: 'adaptogenos', momento: 'comida', dosis: '500 - 1,000 mg', vehiculo: 'Grasa dietética obligatoria', evitar: 'Estómago vacío (nula absorción)', adv: 'Precaución si se usan anticoagulantes o hay litiasis biliar.' },
-      { id: 'berberina', nombre: 'Berberina HCL', cat: 'adaptogenos', momento: 'comida', dosis: '500 mg', vehiculo: '15 min antes de carbohidratos', evitar: 'Ayuno total prolongado', adv: 'Frena transitoriamente citocromos hepáticos; separar de medicinas.' },
-      { id: 'melena_leon', nombre: 'Melena de León (Hericium erinaceus)', cat: 'adaptogenos', momento: 'manana', dosis: '500 - 1,000 mg', vehiculo: 'Con desayuno o café matutino', evitar: 'Noche en dosis altas', adv: 'Estimula la síntesis de factor de crecimiento nervioso (NGF).' },
-      { id: 'reishi', nombre: 'Reishi (Ganoderma lucidum)', cat: 'adaptogenos', momento: 'noche', dosis: '500 - 1,000 mg', vehiculo: 'Con infusión o comida nocturna', evitar: 'Estimulantes', adv: 'Triterpenos relajantes e inmunomoduladores.' },
-      { id: 'cordyceps', nombre: 'Cordyceps Militaris / Sinensis', cat: 'adaptogenos', momento: 'manana', dosis: '500 - 1,000 mg', vehiculo: 'Desayuno o pre-entreno', evitar: 'Noche', adv: 'Optimiza la síntesis de ATP y oxigenación tisular.' },
-      { id: 'chaga', nombre: 'Hongo Chaga', cat: 'adaptogenos', momento: 'manana', dosis: '500 mg', vehiculo: 'Agua caliente o café', evitar: 'Noche', adv: 'Rico en betaglucanos y ácido betulínico.' },
-      { id: 'bacopa', nombre: 'Bacopa Monnieri (Synapsa)', cat: 'adaptogenos', momento: 'comida', dosis: '300 mg', vehiculo: 'SIEMPRE con grasas completas', evitar: 'Estómago vacío (induce náusea)', adv: 'Potenciador colinérgico para memoria de trabajo.' },
-      { id: 'ginkgo', nombre: 'Ginkgo Biloba (EGb 761)', cat: 'adaptogenos', momento: 'manana', dosis: '120 - 240 mg', vehiculo: 'Con alimentos', evitar: 'Ayuno', adv: 'Evitar si se consumen antiagregantes, aspirina o AINEs.' },
-      { id: 'silimarina', nombre: 'Cardo Mariano (Silimarina)', cat: 'adaptogenos', momento: 'comida', dosis: '150 - 300 mg', vehiculo: 'Con alimentos grasos', evitar: 'Alcohol', adv: 'Hepatoprotector y estimulador de bilis.' },
-      { id: 'egcg', nombre: 'Extracto Té Verde (EGCG)', cat: 'adaptogenos', momento: 'comida', dosis: '300 - 500 mg', vehiculo: 'Con comida ligera', evitar: 'AYUNO TOTAL (riesgo hepático agudo)', adv: 'Bloquea absorción de hierro vegetal y ácido fólico.' },
-
-      // Aminoácidos y Nootrópicos
-      { id: 'l_teanina', nombre: 'L-Teanina', cat: 'aminoacidos', momento: 'manana', dosis: '100 - 200 mg', vehiculo: 'Agua (ideal con el café matutino)', evitar: 'Ninguno en particular', adv: 'Suaviza la curva adrenérgica de la cafeína sin causar somnolencia.' },
-      { id: 'l_tirosina', nombre: 'L-Tirosina', cat: 'aminoacidos', momento: 'ayunas', dosis: '500 - 1,000 mg', vehiculo: 'Agua matutina en ayunas', evitar: 'Proteínas densas al momento (compite)', adv: 'Precursor de catecolaminas (dopamina/adrenalina) y tiroxina.' },
-      { id: 'creatina', nombre: 'Creatina Monohidrato Creapure', cat: 'aminoacidos', momento: 'manana', dosis: '3 - 5 g', vehiculo: 'Agua abundante con comida', evitar: 'Deshidratación', adv: 'Saturación muscular y reciclaje de fosfocreatina cerebral.' },
-      { id: 'l_glutamina', nombre: 'L-Glutamina', cat: 'aminoacidos', momento: 'ayunas', dosis: '5 g', vehiculo: 'Agua fresca o fría', evitar: 'Bebidas calientes (la desnaturalizan)', adv: 'Sustrato energético primordial de los enterocitos del colon.' },
-      { id: 'glicina', nombre: 'Glicina Pura', cat: 'aminoacidos', momento: 'noche', dosis: '3 - 5 g', vehiculo: 'Agua tibia antes de acostarse', evitar: 'Comidas hiperproteicas copiosas', adv: 'Enfría la temperatura corporal central facilitando fase profunda de sueño.' },
-      { id: 'taurina', nombre: 'Taurina', cat: 'aminoacidos', momento: 'noche', dosis: '500 - 1,500 mg', vehiculo: 'Con agua', evitar: 'Estimulantes', adv: 'Agonista suave de receptores GABA y osmorregulador celular.' },
-      { id: 'alcar', nombre: 'Acetil L-Carnitina (ALCAR)', cat: 'aminoacidos', momento: 'manana', dosis: '500 - 1,000 mg', vehiculo: 'Agua en ayunas o desayuno', evitar: 'Noche (genera insomnio)', adv: 'Transporte de ácidos grasos a la matriz mitocondrial cerebral.' },
-      { id: 'triptofano', nombre: 'L-Triptófano', cat: 'aminoacidos', momento: 'noche', dosis: '500 mg', vehiculo: 'Agua o carbohidrato simple ligero', evitar: 'Proteínas densas al momento', adv: '¡PELIGRO!: No combinar con fármacos antidepresivos ISRS/IRSN.' },
-      { id: 'htp5', nombre: '5-HTP (5-Hidroxitriptófano)', cat: 'aminoacidos', momento: 'noche', dosis: '50 - 100 mg', vehiculo: 'Agua antes de dormir', evitar: 'Comidas pesadas', adv: '¡PELIGRO!: Riesgo de toxicidad por exceso de serotonina con antidepresivos.' },
-      { id: 'gaba_puro', nombre: 'GABA', cat: 'aminoacidos', momento: 'noche', dosis: '250 - 500 mg', vehiculo: 'Estómago vacío con agua', evitar: 'Alcohol', adv: 'Favorece inhibición central y relajación muscular.' },
-
-      // Digestivos y Microbiota
-      { id: 'probioticos', nombre: 'Probióticos Multicepa (50B UFC)', cat: 'digestivos', momento: 'ayunas', dosis: '1 cápsula', vehiculo: 'Agua templada o con comida suave', evitar: 'Bebidas hirviendo', adv: 'Separar obligatoriamente 2 a 3 horas de cualquier antibiótico.' },
-      { id: 'psyllium', nombre: 'Psyllium Husk (Cáscara de Plántago)', cat: 'digestivos', momento: 'manana', dosis: '5 g', vehiculo: 'MÍNIMO 350 ml de agua', evitar: 'Tomas conjuntas de suplementos', adv: '¡QUELA ACTIVAMENTE!: Separar 2 horas de TODO nutriente o fármaco.' },
-      { id: 'betaina_hcl', nombre: 'Betaína HCL + Pepsina', cat: 'digestivos', momento: 'comida', dosis: '350 - 650 mg', vehiculo: 'Mitad de comida con proteína densa', evitar: 'Ayuno, fruta sola o comidas ligeras', adv: '¡CONTRAINDICADO con gastritis activa, úlcera o uso de AINEs!' },
-      { id: 'enzimas_dig', nombre: 'Enzimas Digestivas de Amplio Espectro', cat: 'digestivos', momento: 'comida', dosis: '1 - 2 cápsulas', vehiculo: 'Al primer bocado de la comida', evitar: 'Fin de la comida o estómago vacío', adv: 'Deben mezclarse con el quimo gástrico al inicio de la ingesta.' },
-      { id: 'tributirina', nombre: 'Tributirina (Ácido Butírico Liposomal)', cat: 'digestivos', momento: 'comida', dosis: '500 - 1,000 mg', vehiculo: 'Con comida sólida', evitar: 'Estómago vacío', adv: 'Postbiótico esencial para regenerar la barrera intestinal.' },
-      { id: 'melatonina', nombre: 'Melatonina (Microdosis)', cat: 'digestivos', momento: 'noche', dosis: '0.3 - 1 mg', vehiculo: 'Agua en penumbra 30 min pre-sueño', evitar: 'Luces azules y pantallas', adv: 'Dosis pequeñas emulan la producción fisiológica de la glándula pineal.' }
+      // Adaptogens & Nootropics
+      { id: 'ashwagandha', cat: 'adaptogenos', momento: 'noche', dosis: '300 - 600 mg',
+        nombre_en: 'Ashwagandha (KSM-66 / Sensoril)', vehiculo_en: 'With dinner or water', evitar_en: 'Alcohol', adv_en: 'Modulates HPA axis cortisol. Monitor if active autoimmunity exists.',
+        nombre_es: 'Ashwagandha (KSM-66 / Sensoril)', vehiculo_es: 'Con comida o cena', evitar_es: 'Alcohol', adv_es: 'Modula cortisol. Supervisar si hay autoinmunidad activa.' },
+      { id: 'rhodiola', cat: 'adaptogenos', momento: 'ayunas', dosis: '200 - 400 mg',
+        nombre_en: 'Rhodiola Rosea (3% Rosavins)', vehiculo_en: 'Morning water fasting', evitar_en: 'Evening / Night (adrenergic stimulant)', adv_en: 'Targeted for stress-induced cognitive fatigue.',
+        nombre_es: 'Rhodiola Rosea (3% Rosavinas)', vehiculo_es: 'Agua matutina en ayunas', evitar_es: 'Tarde / Noche (estimulante adrenérgico)', adv_es: 'Excelente para fatiga mental inducida por estrés.' },
+      { id: 'curcumina_pip', cat: 'adaptogenos', momento: 'comida', dosis: '500 - 1,000 mg',
+        nombre_en: 'Curcumin + Piperine (BCM-95)', vehiculo_en: 'Mandatory dietary fats', evitar_en: 'Empty stomach (negligible uptake)', adv_en: 'Caution with blood thinners or gallbladder stones.',
+        nombre_es: 'Cúrcuma + Piperina / BCM-95', vehiculo_es: 'Grasa dietética obligatoria', evitar_es: 'Estómago vacío (nula absorción)', adv_es: 'Precaución si se usan anticoagulantes o litiasis biliar.' },
+      { id: 'berberina', cat: 'adaptogenos', momento: 'comida', dosis: '500 mg',
+        nombre_en: 'Berberine HCL', vehiculo_en: '15 min before carb meal', evitar_en: 'Prolonged prolonged fasting', adv_en: 'Modulates CYP3A4 / CYP2D6 cytochromes; space from pharmaceuticals.',
+        nombre_es: 'Berberina HCL', vehiculo_es: '15 min antes de carbohidratos', evitar_es: 'Ayuno total prolongado', adv_es: 'Frena citocromos hepáticos; separar de medicinas.' },
+      { id: 'melena_leon', cat: 'adaptogenos', momento: 'manana', dosis: '500 - 1,000 mg',
+        nombre_en: 'Lion\'s Mane (Hericium erinaceus)', vehiculo_en: 'Breakfast or morning coffee', evitar_en: 'Late night in high doses', adv_en: 'Stimulates Nerve Growth Factor (NGF) synthesis.',
+        nombre_es: 'Melena de León (Hericium erinaceus)', vehiculo_es: 'Con desayuno o café matutino', evitar_es: 'Noche en dosis altas', adv_es: 'Estimula síntesis de factor de crecimiento nervioso.' },
+      { id: 'l_teanina', cat: 'aminoacidos', momento: 'manana', dosis: '100 - 200 mg',
+        nombre_en: 'L-Theanine', vehiculo_en: 'Water (ideal with morning coffee)', evitar_en: 'None', adv_en: 'Smooths caffeine adrenergic spikes without sedation.',
+        nombre_es: 'L-Teanina', vehiculo_es: 'Agua (ideal con el café matutino)', evitar_es: 'Ninguno en particular', adv_es: 'Suaviza la curva adrenérgica de la cafeína sin causar somnolencia.' },
+      { id: 'creatina', cat: 'aminoacidos', momento: 'manana', dosis: '3 - 5 g',
+        nombre_en: 'Creatine Monohydrate (Creapure)', vehiculo_en: 'Plenty of water with meal', evitar_en: 'Dehydration', adv_en: 'Muscular saturation and cerebral phosphocreatine resynthesis.',
+        nombre_es: 'Creatina Monohidrato Creapure', vehiculo_es: 'Agua abundante con comida', evitar_es: 'Deshidratación', adv_es: 'Saturación muscular y fosfocreatina cerebral.' },
+      { id: 'glicina', cat: 'aminoacidos', momento: 'noche', dosis: '3 - 5 g',
+        nombre_en: 'Pure Glycine', vehiculo_en: 'Warm water before bed', evitar_en: 'Heavy protein bolus right at bedtime', adv_en: 'Cools core body temperature to facilitate slow-wave deep sleep.',
+        nombre_es: 'Glicina Pura', vehiculo_es: 'Agua tibia antes de acostarse', evitar_es: 'Comidas hiperproteicas copiosas', adv_es: 'Enfría la temperatura corporal central facilitando sueño profundo.' },
+      { id: 'psyllium', cat: 'digestivos', momento: 'manana', dosis: '5 g',
+        nombre_en: 'Psyllium Husk', vehiculo_en: 'MINIMUM 350 ml of water', evitar_en: 'Taking other supplements at same hour', adv_en: 'STRONG BINDER: Must be separated by 2 hours from ALL nutrients & meds.',
+        nombre_es: 'Psyllium Husk (Cáscara de Plántago)', vehiculo_es: 'MÍNIMO 350 ml de agua', evitar_es: 'Tomas conjuntas de suplementos', adv_es: '¡QUELA ACTIVAMENTE!: Separar 2 horas de TODO nutriente o fármaco.' },
+      { id: 'melatonina', cat: 'digestivos', momento: 'noche', dosis: '0.3 - 1 mg',
+        nombre_en: 'Melatonin (Microdose)', vehiculo_en: 'Water in dim light 30 min pre-bed', evitar_en: 'Blue lights and active screens', adv_en: 'Physiological microdosing mimics natural pineal gland pulsatility.',
+        nombre_es: 'Melatonina (Microdosis)', vehiculo_es: 'Agua en penumbra 30 min pre-sueño', evitar_es: 'Luces azules y pantallas', adv_es: 'Dosis pequeñas emulan la producción fisiológica pineal.' }
     ];
 
-    // ESTADO DE LA APP
+    // APP STATE
+    let idiomaActual = localStorage.getItem('stacksync_lang') || 'en';
     let seleccionados = new Set();
     let categoriaActiva = 'todas';
     let esPro = localStorage.getItem('stacksync_pro') === 'true';
 
-    // Renderizar Catálogo
+    // CAMBIAR IDIOMA
+    function cambiarIdioma(lang) {
+      idiomaActual = lang;
+      localStorage.setItem('stacksync_lang', lang);
+
+      // Botones selector
+      const btnEn = document.getElementById('btn-lang-en');
+      const btnEs = document.getElementById('btn-lang-es');
+      if (lang === 'en') {
+        btnEn.className = "px-2 py-1 rounded-md transition text-white bg-slate-900";
+        btnEs.className = "px-2 py-1 rounded-md transition text-slate-600 hover:text-slate-900";
+      } else {
+        btnEs.className = "px-2 py-1 rounded-md transition text-white bg-slate-900";
+        btnEn.className = "px-2 py-1 rounded-md transition text-slate-600 hover:text-slate-900";
+      }
+
+      actualizarTextosUI();
+      renderCategorias();
+      renderCatalogo();
+      actualizarCronograma();
+    }
+
+    function actualizarTextosUI() {
+      const t = i18n[idiomaActual];
+      document.getElementById('ui-subtitle').innerText = t.subtitle;
+      document.getElementById('ui-banner-text').innerText = t.banner;
+      document.getElementById('ui-catalog-title').innerHTML = `<i class="fa-solid fa-layer-group text-emerald-600"></i> ${t.catalogTitle}`;
+      document.getElementById('ui-clear-btn').innerText = t.clearBtn;
+      document.getElementById('buscador').placeholder = t.searchPlaceholder;
+      document.getElementById('ui-alerts-title').innerText = t.alertsTitle;
+      document.getElementById('ui-routine-title').innerText = t.routineTitle;
+      document.getElementById('ui-routine-desc').innerText = t.routineDesc;
+      document.getElementById('ui-export-btn').innerText = t.exportBtn;
+
+      document.getElementById('ui-b1-title').innerText = t.b1Title;
+      document.getElementById('ui-b1-desc').innerText = t.b1Desc;
+      document.getElementById('ui-b2-title').innerText = t.b2Title;
+      document.getElementById('ui-b2-desc').innerText = t.b2Desc;
+      document.getElementById('ui-b3-title').innerText = t.b3Title;
+      document.getElementById('ui-b3-desc').innerText = t.b3Desc;
+      document.getElementById('ui-b4-title').innerText = t.b4Title;
+      document.getElementById('ui-b4-desc').innerText = t.b4Desc;
+
+      // Modal Pro
+      document.getElementById('ui-modal-title').innerText = t.modalTitle;
+      document.getElementById('ui-modal-subtitle').innerText = t.modalSubtitle;
+      document.getElementById('ui-modal-cta').innerText = t.modalCta;
+      document.getElementById('ui-modal-hascode').innerText = t.modalHasCode;
+      document.getElementById('ui-modal-activate-btn').innerText = t.modalActivateBtn;
+      document.getElementById('error-licencia').innerText = t.invalidKey;
+
+      const containerFeatures = document.getElementById('ui-modal-features');
+      containerFeatures.innerHTML = '';
+      t.modalFeatures.forEach(f => {
+        containerFeatures.innerHTML += `
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-check text-emerald-600"></i>
+            <span>${f}</span>
+          </div>
+        `;
+      });
+
+      actualizarEstadoProUI();
+    }
+
+    function renderCategorias() {
+      const contenedor = document.getElementById('contenedor-categorias');
+      contenedor.innerHTML = '';
+      const cats = i18n[idiomaActual].categories;
+
+      Object.keys(cats).forEach(key => {
+        const btn = document.createElement('button');
+        btn.setAttribute('data-cat', key);
+        btn.onclick = () => filtrarCategoria(key);
+        if (categoriaActiva === key) {
+          btn.className = "cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-900 text-white font-medium shadow-xs text-[11px]";
+        } else {
+          btn.className = "cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200 text-[11px]";
+        }
+        btn.innerText = cats[key];
+        contenedor.appendChild(btn);
+      });
+    }
+
     function renderCatalogo() {
       const contenedor = document.getElementById('lista-suplementos');
       const busqueda = document.getElementById('buscador').value.toLowerCase();
+      const t = i18n[idiomaActual];
       contenedor.innerHTML = '';
 
       const filtrados = DB.filter(sup => {
+        const nombre = idiomaActual === 'en' ? sup.nombre_en : sup.nombre_es;
+        const adv = idiomaActual === 'en' ? sup.adv_en : sup.adv_es;
         const coincideCat = categoriaActiva === 'todas' || sup.cat === categoriaActiva;
-        const coincideTexto = sup.nombre.toLowerCase().includes(busqueda) || sup.adv.toLowerCase().includes(busqueda);
+        const coincideTexto = nombre.toLowerCase().includes(busqueda) || adv.toLowerCase().includes(busqueda);
         return coincideCat && coincideTexto;
       });
 
-      if (filtrados.length === 0) {
-        contenedor.innerHTML = `<div class="p-8 text-center text-xs text-slate-400">No encontramos suplementos con ese término.</div>`;
-        return;
-      }
-
       filtrados.forEach(sup => {
         const checked = seleccionados.has(sup.id);
+        const nombre = idiomaActual === 'en' ? sup.nombre_en : sup.nombre_es;
+        const vehiculo = idiomaActual === 'en' ? sup.vehiculo_en : sup.vehiculo_es;
+
         const card = document.createElement('div');
         card.className = `p-3 rounded-xl border transition cursor-pointer flex items-start justify-between gap-2.5 ${checked ? 'bg-emerald-50/80 border-emerald-300 ring-1 ring-emerald-400/30' : 'bg-slate-50 border-slate-200/70 hover:bg-slate-100/70'}`;
         card.onclick = () => alternarSuplemento(sup.id);
@@ -374,17 +624,17 @@
         card.innerHTML = `
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="font-bold text-xs ${checked ? 'text-emerald-950' : 'text-slate-800'}">${sup.nombre}</span>
+              <span class="font-bold text-xs ${checked ? 'text-emerald-950' : 'text-slate-800'}">${nombre}</span>
               <span class="text-[10px] px-1.5 py-0.2 rounded bg-white border border-slate-200 text-slate-500 font-mono">${sup.dosis}</span>
             </div>
-            <p class="text-[11px] text-slate-500 mt-1 line-clamp-1"><strong class="text-slate-600">Toma:</strong> ${sup.vehiculo}</p>
+            <p class="text-[11px] text-slate-500 mt-1 line-clamp-1"><strong class="text-slate-600">${t.takeWith}</strong> ${vehiculo}</p>
           </div>
           <input type="checkbox" ${checked ? 'checked' : ''} class="mt-0.5 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 pointer-events-none">
         `;
         contenedor.appendChild(card);
       });
 
-      document.getElementById('contador-seleccion').innerText = `${seleccionados.size} seleccionados`;
+      document.getElementById('contador-seleccion').innerText = `${seleccionados.size} ${t.selectedCount}`;
       actualizarEstadoProUI();
     }
 
@@ -404,13 +654,7 @@
 
     function filtrarCategoria(cat) {
       categoriaActiva = cat;
-      document.querySelectorAll('.cat-btn').forEach(btn => {
-        if (btn.getAttribute('data-cat') === cat) {
-          btn.className = 'cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-900 text-white font-medium text-[11px] shadow-xs';
-        } else {
-          btn.className = 'cat-btn whitespace-nowrap px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium hover:bg-slate-200 text-[11px]';
-        }
-      });
+      renderCategorias();
       renderCatalogo();
     }
 
@@ -424,84 +668,65 @@
       actualizarCronograma();
     }
 
-    // MOTOR DE REGLAS BIOQUÍMICAS
+    // BIOCHEMICAL ENGINE RULES
     function evaluarReglas(sups) {
       const alertas = [];
       const ids = new Set(sups.map(s => s.id));
+      const es = idiomaActual === 'es';
 
-      // 1. Conflicto DMT1: Hierro vs Zinc, Calcio o Magnesio
+      // DMT1 Conflict: Iron vs Zinc/Calcium/Magnesium
       if (ids.has('hierro') && (ids.has('calcio_citrato') || ids.has('zinc_picolinato') || ids.has('mg_glicinato') || ids.has('mg_citrato') || ids.has('mg_malato'))) {
         alertas.push({
           tipo: 'rojo',
-          titulo: 'Competencia Directa por Transportador Celular (DMT1)',
-          msg: 'El Hierro compite por la misma compuerta intestinal que el Calcio, Zinc y Magnesio. El cronograma ha aislado automáticamente el Hierro en el bloque de ayunas. No los unas en la misma toma.'
+          titulo: es ? 'Competencia Directa por Transportador Celular (DMT1)' : 'Direct Cellular Transporter Competition (DMT1)',
+          msg: es 
+            ? 'El Hierro compite por la compuerta intestinal DMT1 con Calcio, Zinc y Magnesio. El cronograma aísla el Hierro en ayunas.'
+            : 'Iron directly competes for intestinal DMT1 entry gates with Calcium, Zinc, and Magnesium. StackSync isolated Iron into the fasted block.'
         });
       }
 
-      // 2. Sinergia Sílice Bambú + Colágeno + Vit C
+      // Bamboo + Collagen + Vit C
       if (ids.has('bambu') && (ids.has('colageno_hidro') || ids.has('colageno_uc2')) && ids.has('vit_c')) {
         alertas.push({
           tipo: 'verde',
-          titulo: 'Tríada Óptima de Síntesis de Colágeno',
-          msg: '¡Combinación excelente! El Sílice del Bambú estimula la prolil-hidroxilasa, la Vitamina C hidroxila los aminoácidos y el colágeno aporta la materia prima estructural.'
+          titulo: es ? 'Tríada Óptima de Síntesis de Colágeno' : 'Optimal Collagen Synthesis Triad',
+          msg: es
+            ? '¡Combinación excelente! El Sílice estimula la prolil-hidroxilasa, la Vit C hidroxila aminoácidos y el colágeno aporta la materia prima.'
+            : 'Excellent stack! Bamboo silica stimulates prolyl-hydroxylase, Vitamin C acts as essential cofactor, and collagen provides structural peptides.'
         });
       }
 
-      // 3. Sinergia D3 + K2 + Magnesio
+      // D3 + K2 Synergy
       if (ids.has('vit_d3') && ids.has('vit_k2')) {
         alertas.push({
           tipo: 'verde',
-          titulo: 'Sinergia Óptima Calcio-Vascular (D3 + K2)',
-          msg: 'La Vitamina D3 aumenta la asimilación del calcio y la K2 (MK-7) activa la osteocalcina para depositarlo en el hueso y evitar calcificación en arterias.'
+          titulo: es ? 'Sinergia Óptima Calcio-Vascular (D3 + K2)' : 'Vascular & Bone Synergy (D3 + K2)',
+          msg: es
+            ? 'La Vitamina D3 aumenta asimilación de calcio y la K2 (MK-7) activa la osteocalcina para dirigirlo al hueso evitando calcificación arterial.'
+            : 'Vitamin D3 accelerates calcium absorption while K2 (MK-7) directs it safely into bone matrix, protecting arterial elasticity.'
         });
       }
 
-      // 4. Competencia Zinc vs Cobre
-      if (ids.has('zinc_picolinato') && ids.has('cobre')) {
-        alertas.push({
-          tipo: 'amarillo',
-          titulo: 'Inhibición Mutua Zinc - Cobre',
-          msg: 'Dosis continuas de zinc inducen metalotioneína intestinal y bloquean el cobre. Tómate el zinc en la comida y el cobre en otro momento del día.'
-        });
-      }
-
-      // 5. Alerta Mecánica Psyllium
+      // Psyllium Alert
       if (ids.has('psyllium')) {
         alertas.push({
           tipo: 'rojo',
-          titulo: 'Barrera Absortiva: Cáscara de Psyllium',
-          msg: 'El mucílago viscoso de Psyllium atrapa activamente micronutrientes y medicación. Toma el Psyllium con 2 horas de separación de cualquier otro suplemento.'
-        });
-      }
-
-      // 6. Alerta Serotonina
-      if (ids.has('htp5') || ids.has('triptofano')) {
-        alertas.push({
-          tipo: 'amarillo',
-          titulo: 'Advertencia Vía Serotoninérgica',
-          msg: 'Si consumes medicación antidepresiva (ISRS o IRSN), no combines 5-HTP o L-Triptófano por riesgo severo de síndrome serotoninérgico.'
-        });
-      }
-
-      // 7. Berberina y citocromos
-      if (ids.has('berberina')) {
-        alertas.push({
-          tipo: 'amarillo',
-          titulo: 'Inhibición Enzimática: Berberina',
-          msg: 'La Berberina modula los citocromos CYP3A4 y CYP2D6. Tómala 15 min antes de carbohidratos, pero separada de medicamentos prescritos.'
+          titulo: es ? 'Barrera Absortiva: Cáscara de Psyllium' : 'Mechanical Binding Warning: Psyllium Husk',
+          msg: es
+            ? 'El mucílago de Psyllium atrapa activamente micronutrientes. Mantén 2 horas de separación estricta de cualquier otro suplemento o fármaco.'
+            : 'Psyllium mucilage strongly traps nutrients and medication. Keep at least 2 hours of strict separation from any other compound.'
         });
       }
 
       return alertas;
     }
 
-    // Actualizar Cronograma
     function actualizarCronograma() {
       const sups = DB.filter(s => seleccionados.has(s.id));
       const panelAlertas = document.getElementById('panel-alertas');
       const contenedorAlertas = document.getElementById('alertas-contenedor');
+      const t = i18n[idiomaActual];
 
-      // Procesar alertas
       const alertas = evaluarReglas(sups);
       if (alertas.length > 0) {
         panelAlertas.classList.remove('hidden');
@@ -526,38 +751,41 @@
         panelAlertas.classList.add('hidden');
       }
 
-      // Separación en bloques
+      // Grouping
       const bloques = { ayunas: [], manana: [], comida: [], noche: [] };
-
       sups.forEach(s => {
-        let bloqueFinal = s.momento;
-        if (s.id.startsWith('mg_') && s.id !== 'mg_malato') bloqueFinal = 'noche';
-        if (s.id === 'hierro') bloqueFinal = 'ayunas';
-        if (s.id === 'zinc_picolinato') bloqueFinal = 'comida';
-        bloques[bloqueFinal].push(s);
+        let b = s.momento;
+        if (s.id.startsWith('mg_') && s.id !== 'mg_malato') b = 'noche';
+        if (s.id === 'hierro') b = 'ayunas';
+        if (s.id === 'zinc_picolinato') b = 'comida';
+        bloques[b].push(s);
       });
 
-      // Render bloques
       ['ayunas', 'manana', 'comida', 'noche'].forEach(bId => {
         const el = document.getElementById(`bloque-${bId}`);
         const lista = bloques[bId];
 
         if (lista.length === 0) {
-          el.innerHTML = `<p class="text-xs text-slate-400 italic">No hay suplementos asignados a este momento.</p>`;
+          el.innerHTML = `<p class="text-xs text-slate-400 italic">${t.emptyBlock}</p>`;
         } else {
           el.innerHTML = '';
           lista.forEach(item => {
+            const nombre = idiomaActual === 'en' ? item.nombre_en : item.nombre_es;
+            const vehiculo = idiomaActual === 'en' ? item.vehiculo_en : item.vehiculo_es;
+            const evitar = idiomaActual === 'en' ? item.evitar_en : item.evitar_es;
+            const adv = idiomaActual === 'en' ? item.adv_en : item.adv_es;
+
             el.innerHTML += `
               <div class="bg-slate-50 border border-slate-200/90 rounded-xl p-3 text-xs flex flex-col gap-1.5 shadow-2xs">
                 <div class="flex items-center justify-between">
-                  <span class="font-bold text-slate-900">${item.nombre}</span>
+                  <span class="font-bold text-slate-900">${nombre}</span>
                   <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-600 font-mono text-[10px] font-semibold">${item.dosis}</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-slate-600 pt-1 border-t border-slate-200/60">
-                  <p><strong class="text-slate-700">Vehículo:</strong> ${item.vehiculo}</p>
-                  <p><strong class="text-rose-700">Evitar con:</strong> ${item.evitar}</p>
+                  <p><strong class="text-slate-700">${t.takeWith}</strong> ${vehiculo}</p>
+                  <p><strong class="text-rose-700">${t.avoidWith}</strong> ${evitar}</p>
                 </div>
-                ${item.adv ? `<p class="text-[11px] text-amber-900 bg-amber-50 px-2 py-1 rounded border border-amber-200/60 mt-0.5 leading-snug">ℹ️ <strong>Nota clínica:</strong> ${item.adv}</p>` : ''}
+                ${adv ? `<p class="text-[11px] text-amber-900 bg-amber-50 px-2 py-1 rounded border border-amber-200/60 mt-0.5 leading-snug">ℹ️ <strong>${t.clinicalNote}</strong>${adv}</p>` : ''}
               </div>
             `;
           });
@@ -565,7 +793,7 @@
       });
     }
 
-    // Modal Pro y Licencias
+    // Modal Pro & Activation
     function abrirModalPro() {
       document.getElementById('modal-pro').classList.remove('hidden');
     }
@@ -576,49 +804,52 @@
 
     function activarLicencia() {
       const clave = document.getElementById('input-licencia').value.trim().toUpperCase();
+      const t = i18n[idiomaActual];
       if (clave === 'STACKPRO') {
         esPro = true;
         localStorage.setItem('stacksync_pro', 'true');
         cerrarModalPro();
         actualizarEstadoProUI();
         renderCatalogo();
-        alert('¡Licencia Pro Activada con Éxito!');
+        alert(t.keySuccess);
       } else {
         document.getElementById('error-licencia').classList.remove('hidden');
       }
     }
 
     function actualizarEstadoProUI() {
+      const t = i18n[idiomaActual];
       const badge = document.getElementById('btn-badge-pro');
       const txtBadge = document.getElementById('txt-badge-pro');
       const limiteAviso = document.getElementById('limite-aviso');
 
       if (esPro) {
         badge.className = "text-xs font-bold px-3 py-1.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg flex items-center gap-1.5";
-        txtBadge.innerText = "Pro Activo";
-        limiteAviso.innerText = "Acceso Ilimitado a 200+ Suplementos";
+        txtBadge.innerText = t.proActive;
+        limiteAviso.innerText = t.proLimit;
       } else {
         badge.className = "text-xs font-bold px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg shadow-xs hover:opacity-95 transition flex items-center gap-1.5";
-        txtBadge.innerText = "Obtener Pro";
-        limiteAviso.innerText = "Versión Gratuita: hasta 4 suplementos";
+        txtBadge.innerText = t.getPro;
+        limiteAviso.innerText = t.freeLimit;
       }
     }
 
-            // Exportar a PDF Directo sin diálogo de impresión
+    // Direct PDF Export via html2pdf
     function exportarRutinaPDF() {
+      const t = i18n[idiomaActual];
       if (!esPro && seleccionados.size > 4) {
         abrirModalPro();
         return;
       }
       if (seleccionados.size === 0) {
-        alert('Por favor selecciona al menos un suplemento antes de exportar.');
+        alert(t.exportEmptyWarning);
         return;
       }
 
       const elemento = document.getElementById('cronograma-container');
       const opciones = {
         margin:       [10, 10, 10, 10],
-        filename:     'StackSync_Rutina_Personalizada.pdf',
+        filename:     idiomaActual === 'en' ? 'StackSync_Daily_Protocol.pdf' : 'StackSync_Rutina_Personalizada.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -627,15 +858,14 @@
       html2pdf().set(opciones).from(elemento).save();
     }
 
+    // Init
+    cambiarIdioma(idiomaActual);
 
-
-    // Inicializar app
-    renderCatalogo();
-
-    // Registro de PWA Service Worker
+    // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js');
     }
   </script>
 </body>
 </html>
+.
