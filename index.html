@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-      <title>StackSync Pro | Optimizador Circadiano de Suplementos</title>
-        <link rel="icon" type="image/jpeg" href="icon.jpg">
-    <link rel="apple-touch-icon" href="icon.jpg">
-    <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StackSync Pro | Optimizador Circadiano de Suplementos</title>
+  <link rel="icon" type="image/jpeg" href="Icon.jpg">
+  <link rel="apple-touch-icon" href="Icon.jpg">
+  <link rel="manifest" href="manifest.json">
   <!-- Configuración App Móvil (PWA) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="StackSync">
   <meta name="theme-color" content="#059669">
 
@@ -20,76 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    @media print {
-      body { background: white !important; color: black !important; }
-      header, #panel-catalogo, #pwa-banner, #acciones-flotantes, #modal-pro { display: none !important; }
-      #cronograma-container { width: 100% !important; display: block !important; }
-      .bloque-print { break-inside: avoid; border: 1px solid #e2e8f0 !important; margin-bottom: 1.5rem !important; }
-    }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
 
-  <!-- Banner PWA para móviles -->
-  <aside id="pwa-banner" class="bg-gradient-to-r from-emerald-900 to-slate-900 text-white px-4 py-2 text-xs flex items-center justify-between shadow-inner">
-    <div class="flex items-center gap-2 truncate">
-      <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i>
-      <span class="truncate">💡 <strong>Tip para celular:</strong> Toca «Compartir» y elige «Agregar al inicio» para usarla como app nativa.</span>
-    </div>
-    <button onclick="document.getElementById('pwa-banner').style.display='none'" class="text-slate-400 hover:text-white ml-2 text-sm">&times;</button>
-  </aside>
-
-  <!-- Encabezado Principal -->
-  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-9 h-9 bg-emerald-600 text-white rounded-xl flex items-center justify-center font-extrabold text-base shadow-sm shadow-emerald-500/20">
-          S²
-        </div>
-        <div>
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg leading-tight">StackSync</h1>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200/60">Pro</span>
-          </div>
-          <p class="text-[11px] text-slate-500 hidden sm:block">Cronograma Bioquímico & Interacciones</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="limpiarSeleccion()" class="text-xs text-slate-500 hover:text-rose-600 transition font-medium px-2 py-1">
-          Limpiar
-        </button>
-        <button onclick="abrirModalPro()" id="btn-badge-pro" class="text-xs font-bold px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg shadow-sm hover:opacity-95 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-crown text-[10px]"></i>
-          <span id="txt-badge-pro">Obtener Pro</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Contenedor Principal -->
-  <main class="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-    <!-- Panel Izquierdo: Catálogo de 200+ Suplementos -->
-    <section id="panel-catalogo" class="lg:col-span-5 flex flex-col bg-white border border-slate-200/90 rounded-2xl shadow-sm overflow-hidden h-[65vh] lg:h-[82vh]">
-      <div class="p-3.5 border-b border-slate-100 space-y-2.5 bg-slate-50/50">
-        <!-- Buscador -->
-        <div class="relative">
-          <i class="fa-solid fa-magnifying-glass w-4 h-4 text-slate-400 absolute left-3 top-3 text-xs"></i>
-          <input 
-            type="text" 
-            id="buscador" 
-            oninput="filtrarSuplementos()" 
-            placeholder="Buscar entre 200+ suplementos (ej. NAD+, Magnesio, Bambú)..." 
-            class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition shadow-inner"
-          >
-          <button onclick="document.getElementById('buscador').value=''; filtrarSuplementos();" class="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 text-xs">
-            &times;
-          </button>
         </div>
 
         <!-- Filtro por Categorías -->
